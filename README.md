@@ -77,28 +77,32 @@ out of five. Formula kernels and descriptions are available in the backpack.
 ## Project structure
 
 The root `index.html` loads classic scripts in dependency order. They share the browser's global
-script scope; keep that order when changing the script list.
+script scope; keep this order when changing the script list:
+
+1. `js/core/constants.js`
+2. `js/managers/Localization.js`
+3. `js/managers/ImageManager.js`
+4. `js/managers/AudioManager.js`
+5. `js/core/World.js`
+6. `js/entities/ghosts.js`
+7. `js/entities/Player.js`
+8. `js/core/Game.js`
+9. `js/systems/RenderSystem.js`
+10. `js/managers/GameUI.js`
+11. `js/main.js`
+
+`main.js` binds input and starts the game after the modules load.
 
 ```text
 index.html
 css/
   styles.css
 js/
+  core/          constants.js, Game.js, World.js
+  entities/      Player.js, ghosts.js
+  managers/      AudioManager.js, GameUI.js, ImageManager.js, Localization.js
+  systems/       RenderSystem.js
   main.js
-  core/
-    constants.js
-    Game.js
-    World.js
-  entities/
-    Player.js
-    ghosts.js
-  managers/
-    AudioManager.js
-    GameUI.js
-    ImageManager.js
-    Localization.js
-  systems/
-    RenderSystem.js
 images/
   floor.png
   ghost1.png
@@ -112,8 +116,9 @@ test/
   style.css
 ```
 
-`test/game.js` is the original full-game source retained as a reference. The root game is split into
-the modules listed above. The first ghost uses `images/ghost1.png`; the remaining ghost sprites are
+The modules divide the game into shared constants and localization, game/world state, player and
+ghost entities, rendering, audio/image managers, and interface/input setup. The first ghost uses
+`images/ghost1.png`; the remaining ghost sprites are
 generated in `js/entities/ghosts.js`. The floor and wall render from their supplied PNG tiles, while
 the ceiling and other scene details are generated in code. Music and sound effects use the Web Audio
 API, and all interface text uses the local Pixel AE font files.
