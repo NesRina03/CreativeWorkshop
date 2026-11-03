@@ -4,13 +4,13 @@
 
 A first-person, pixel-art browser game set in a **haunted mansion** that teaches **convolution** by
 letting kids *see* it work. You are a rookie ghost hunter whose detector only works with **formulas**
-(small filter grids) hidden around the house. Each of the five ghosts hides in a different way.
-Choose the formula that fixes what is wrong with the picture, watch a small grid slide across the
-ghost to reveal it, then shoot.
+(small filter grids) hidden around the house. Find each formula, equip it in the lens, reveal the
+matching ghost, then catch it. Every new round randomly assigns one to three ghosts of each of the
+five kinds.
 
 Made for the **Creative Workshop, Subject 1: Convolution**.
 Audience: ages 10-14, artisan community, primary-school level. No maths notation is needed to play.
-**Game language: Algerian Darija** (Arabic script, right-to-left).
+**Game languages: English and Algerian Darija** (Arabic script, right-to-left).
 
 > Original characters and art. This is a school project and is not affiliated with the Ghostbusters franchise.
 
@@ -20,7 +20,7 @@ Audience: ages 10-14, artisan community, primary-school level. No maths notation
 
 - **Live demo:** `<add link, e.g. GitHub Pages or itch.io>`
 - **Platform:** desktop web browser (keyboard and mouse). Not designed for phones or tablets.
-- **Length:** 10-15 minutes, one player.
+- **Length:** seven minutes per round.
 
 ### Controls
 
@@ -28,39 +28,47 @@ Audience: ages 10-14, artisan community, primary-school level. No maths notation
 | --- | --- |
 | Walk forward / back | `W` / `S` (or `Up` / `Down`) |
 | Step left / right | `A` / `D` |
-| Look around | Mouse (or `Left` / `Right` arrows) |
-| Pick up a formula | `E` |
+| Look around | Drag on the scene (or `Left` / `Right` arrows) |
+| Pick up a nearby formula / use selected formula on a ghost | `F` |
+| Toggle the lens | `L` |
 | Open the backpack | `B` |
-| Scan the ghost in front of you | `F` |
-| Shoot | Left mouse button |
+| Reopen the mission briefing | `H` |
+| Catch a revealed ghost | Aim and click |
 | Pause | `Esc` |
 
-The screen always shows the time left, ghosts caught (for example 2 of 5), formulas collected,
-and the formula currently selected.
+The HUD shows caught and uncaught totals for each ghost kind, the time left, and formulas collected
+out of five. Activate the lens to see distorted ghosts; turn it off to hide them.
 
-> The browser captures the mouse (Pointer Lock) when you click to start. `Esc` releases it, and the
-> game treats that as Pause.
-
----
-
-## How a round works
-
-1. **Find a formula.** Formulas glow in the rooms and corridors of the mansion. Walk up and press `E`.
-2. **Read its card.** It shows the formula's name, what it does (for example "removes blur"),
-   and a small grid of coloured numbers. Players do not need to understand the grid.
-3. **Spot the clue.** Every ghost leaves a trace: enough to see it, not enough to lock on.
-4. **Choose a formula.** Open the backpack and pick the one you think fits.
-5. **Scan, then shoot.** Face the ghost and press `F`.
-   - Right choice: a small grid window races across the ghost and reveals it. Aim at it and shoot.
-   - Wrong choice: the scan shows nothing useful, a short message explains why, and you try
-     another formula. It costs a little time.
-
-**Win:** every ghost is caught before the timer hits zero.
-**Lose:** time runs out and the ghosts catch you. Press Replay to try again.
+> The cursor remains visible and available for HUD buttons throughout the round. Drag on the scene
+> to look around; clicking without dragging attempts to catch a revealed ghost. `L`, `B`, and `H`
+> also toggle the lens, open the backpack, and reopen the help briefing.
 
 ---
 
-## The five ghosts
+## Menus and how a round works
+
+The main menu offers Play, Options (separate sound and music toggles), Language (English or Arabic),
+and Exit. The pause menu provides the same options alongside Resume and Restart.
+
+1. **Start from the menu.** Play opens a skippable mission briefing. Press `Enter` or Continue to
+   begin. The help icon opens the briefing again during play.
+2. **Find formulas.** Walk up to a glowing formula and press `F`. Its name, function, and kernel
+   appear; collected formulas are stored in the backpack.
+3. **Look through the lens.** Turn the lens on to reveal distorted ghosts. Ghosts are invisible
+   while the lens is off.
+4. **Choose a formula.** Open the backpack with `B`, select a collected formula, and equip it to the
+   lens. Face a visible ghost and press `F` to try the formula.
+5. **Catch the ghost.** A correct formula scans and reveals the ghost's true form. Aim and click to
+   catch it. A wrong formula uses one of that ghost's two chances; the second wrong choice loses
+   the round.
+
+**Win:** catch every assigned ghost before the seven-minute timer expires.
+**Lose:** time runs out or you use both formula chances on a ghost. Restart to try again.
+Escape opens the same pause menu as the pause button, with Resume, Restart, Options, Language, and Exit.
+
+---
+
+## Ghost roster
 
 | Ghost | The clue | Formula | What it does | Filter behind it |
 | --- | --- | --- | --- | --- |
@@ -105,8 +113,7 @@ npx serve                       # alternative if you have Node.js
 Or open the folder in VS Code and use the **Live Server** extension.
 
 > **Do not open `index.html` by double-clicking it.** Browsers treat `file://` pages as
-> cross-origin, which blocks `getImageData` on loaded images and breaks the scan. Pointer Lock
-> also needs a normal page, not `file://`, in some browsers.
+> cross-origin, which blocks `getImageData` on loaded images and breaks the scan.
 
 ### Deploying
 
@@ -119,33 +126,51 @@ on that machine before the demo.
 ## Tech stack
 
 - HTML5 Canvas and vanilla JavaScript (ES modules), no framework and no build tools
-- **First-person view with a raycaster** (Wolfenstein-style): the mansion is a grid map, walls are
-  64x64 textures, and ghosts, formulas and furniture are billboard sprites
+- **First-person view with a raycaster** (Wolfenstein-style): the mansion is a grid map with the
+  supplied floor and wall tiles, and ghost and formula billboards
 - Internal resolution 480x272 (lower it to 320x180 if the demo laptop is slow), scaled up with CSS
   `image-rendering: pixelated`
-- Mouse look with the Pointer Lock API
+- Visible-cursor mouse look by dragging on the scene; HUD controls remain clickable
 - Filters applied to ghost sprites with `ImageData`
+- Pixel AE font files in `fonts/` are used for the complete UI
+- **Music and sound effects generated with the Web Audio API**, with independent menu toggles
 - **UI as HTML on top of the canvas** (formula card, backpack, messages, HUD), so Arabic text is
   shaped and laid out right-to-left by the browser
 
-## Project structure
+Ghost type definitions and instance creation live in `js/entities/ghosts.js`. `images/ghost1.png` is
+used for The Blur; the other ghost types remain generated placeholders.
+Each round rolls one to three ghosts of each type (five to fifteen ghosts total) and distributes one
+pickup for each of the five formulas. The scan applies the selected kernel to the ghost's `ImageData`
+and progressively reveals the convolved result.
 
-*(Planned layout. Adjust to match the repo.)*
+## Project structure
 
 ```
 index.html
-src/
-  main.js          game loop and state machine (menu, play, scan, win, lose)
-  raycaster.js     wall casting, textures, sprite billboards, depth buffer
-  player.js        movement, mouse look, collision against the grid map
-  map.js           mansion layout (grid), doors, pickup and ghost positions
-  ghosts.js        ghost data, movement and clue generation
-  convolution.js   convolve() and the kernel list
-  scan.js          sliding-window scan animation
-  ui.js            HTML overlays: HUD, formula card, backpack, messages
-  i18n/ar-DZ.js    every piece of player-facing text
-assets/
-  textures/  sprites/ghosts/  sprites/props/  sprites/items/  ui/  fx/  audio/  fonts/
+css/
+  styles.css
+js/
+  main.js
+  core/
+    Game.js
+    World.js
+    constants.js
+  entities/
+    Player.js
+    ghosts.js
+  managers/
+    AudioManager.js
+    Localization.js
+  systems/
+    ConvolutionSystem.js
+    RenderSystem.js
+images/
+  floor.png
+  ghost1.png
+  wall.png
+fonts/
+  PixelAE-Regular.ttf
+  PixelAE-Bold.ttf
 ```
 
 ### Adding or changing a ghost
@@ -175,9 +200,9 @@ Kernels live in `convolution.js`:
 
 ---
 
-## Language: Algerian Darija
+## Languages: English and Algerian Darija
 
-- All player-facing text lives in `src/i18n/ar-DZ.js`. Code, comments and this README stay in English.
+- Player-facing text lives in `js/managers/Localization.js`. Code, comments and this README stay in English.
 - The UI overlay uses `lang="ar-DZ"` and `dir="rtl"`. Text is HTML, not drawn on the canvas, which avoids
   broken letter joining and wrapping problems.
 - Use an Arabic-capable font. Most pixel fonts (such as Press Start 2P) have **no Arabic letters**.
@@ -185,15 +210,7 @@ Kernels live in `convolution.js`:
 - Short sentences, simple words, and the same word for the same thing everywhere.
 - Have a native speaker from the target age group read every line before the demo.
 
-Names to settle with the team:
-
-| English | Darija (Arabic script) |
-| --- | --- |
-| Game title | `<...>` |
-| The Blur / The Static / The Veil / The Relief / The Split | `<...>` |
-| Spectral Clarity / Static Eater / Boundary Seeker / Phantom Engraver / Rift Finder | `<...>` |
-| Formula, backpack, scan, shoot, time left, ghosts caught | `<...>` |
-| You win / Time is up / Replay | `<...>` |
+Game text is currently a draft and should be reviewed by a native speaker from the target age group.
 
 ---
 
@@ -210,7 +227,7 @@ Fill this in once the assets are chosen. Always check the licence on each downlo
 | Detector (held in first person) | `<team or author>` | `<link>` | `<licence>` |
 | UI frames and icons | `<author>` | `<link>` | `<licence>` |
 | Fonts (Arabic-capable) | `<name>` | `<link>` | `<e.g. OFL>` |
-| Sound effects and ambience | `<author or jsfxr>` | `<link>` | `<licence>` |
+| Music and sound effects | Web Audio API | Generated in `js/managers/AudioManager.js` | Original code |
 | Palette | `<name>` | Lospec | `<link>` |
 
 ---

@@ -3,20 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ghost Game</title>
+    <title>Ghostbusters: The Lost Formulas</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div id="gameContainer">
-        <nav id="gameToolbar" aria-label="Game settings">
-            <button id="languageButton" type="button" aria-label="Switch language">العربية</button>
-            <button id="soundButton" type="button" aria-pressed="false">Sound: Off</button>
-            <button id="musicButton" type="button" aria-pressed="false">Music: Off</button>
-            <span id="audioStatus" class="visually-hidden" role="status" aria-live="polite"></span>
-        </nav>
-        <canvas id="gameCanvas"></canvas>
-    </div>
-    
+    <main id="gameContainer">
+        <canvas id="gameCanvas" aria-label="First-person haunted mansion game"></canvas>
+
+        <header id="gameHud" hidden>
+            <section id="ghostCounts" aria-label="Ghosts caught and remaining">
+                <div class="ghost-count" data-ghost="blur"><span class="ghost-icon">◉</span><span id="blurCount">0 / 0</span></div>
+                <div class="ghost-count" data-ghost="static"><span class="ghost-icon">✦</span><span id="staticCount">0 / 0</span></div>
+                <div class="ghost-count" data-ghost="veil"><span class="ghost-icon">◇</span><span id="veilCount">0 / 0</span></div>
+                <div class="ghost-count" data-ghost="relief"><span class="ghost-icon">▧</span><span id="reliefCount">0 / 0</span></div>
+                <div class="ghost-count" data-ghost="split"><span class="ghost-icon">ϟ</span><span id="splitCount">0 / 0</span></div>
+            </section>
+            <div class="hud-actions">
+                <strong><span id="timeLabel">Time</span> <span id="timeValue">07:00</span></strong>
+                <strong><span id="formulaCountLabel">Formulas</span> <span id="formulaValue">0 / 5</span></strong>
+                <button id="lensButton" type="button" aria-pressed="false">Lens: Off</button>
+                <button id="backpackButton" type="button">Backpack</button>
+                <button id="helpButton" type="button" aria-label="Mission help">?</button>
+                <button id="pauseButton" type="button" aria-label="Pause">Ⅱ</button>
+            </div>
+        </header>
+
+        <div id="crosshair" aria-hidden="true" hidden>+</div>
+        <p id="gamePrompt" role="status" aria-live="polite"></p>
+
+        <section id="backpackPanel" class="side-panel" hidden aria-labelledby="backpackTitle">
+            <button id="closeBackpackButton" class="panel-close" type="button" aria-label="Close backpack">×</button>
+            <h2 id="backpackTitle">Backpack</h2>
+            <p id="backpackCount">0 / 5</p>
+            <div id="formulaList"></div>
+            <article id="formulaDetails" hidden>
+                <h3 id="formulaName"></h3>
+                <p id="formulaDescription"></p>
+                <p id="kernelCaption"></p>
+                <div id="formulaGrid" class="formula-grid"></div>
+                <button id="equipFormulaButton" type="button"></button>
+            </article>
+        </section>
+
+        <section id="pickupPanel" class="info-panel" hidden aria-live="polite">
+            <h2 id="pickupTitle"></h2>
+            <p id="pickupDescription"></p>
+            <div id="pickupGrid" class="formula-grid"></div>
+            <button id="pickupContinueButton" type="button">Continue</button>
+        </section>
+
+        <div id="screenOverlay" role="dialog" aria-modal="true" aria-labelledby="screenTitle">
+            <section class="screen-card" data-screen="menu">
+                <h1 id="gameTitle">Ghostbusters: The Lost Formulas</h1>
+                <button id="playButton" type="button">Play</button>
+                <button id="openOptionsButton" type="button">Options</button>
+                <button id="openLanguageButton" type="button">Language</button>
+                <button id="exitButton" type="button">Exit</button>
+            </section>
+            <section class="screen-card" data-screen="options" hidden>
+                <h1 id="optionsTitle">Options</h1>
+                <button id="soundButton" type="button" aria-pressed="false">Sound: Off</button>
+                <button id="musicButton" type="button" aria-pressed="false">Music: Off</button>
+                <button id="optionsBackButton" type="button">Back</button>
+            </section>
+            <section class="screen-card" data-screen="language" hidden>
+                <h1 id="languageTitle">Language</h1>
+                <button id="englishButton" type="button">English</button>
+                <button id="arabicButton" type="button">العربية</button>
+                <button id="languageBackButton" type="button">Back</button>
+            </section>
+            <section class="screen-card" data-screen="intro" hidden>
+                <h1 id="introTitle">Your mission</h1>
+                <p id="introText"></p>
+                <p id="introControls"></p>
+                <button id="continueIntroButton" type="button">Continue</button>
+                <span id="skipHint"></span>
+            </section>
+            <section class="screen-card" data-screen="pause" hidden>
+                <h1 id="pauseTitle">Paused</h1>
+                <button id="resumeButton" type="button">Resume</button>
+                <button id="restartButton" type="button">Restart</button>
+                <button id="pauseOptionsButton" type="button">Options</button>
+                <button id="pauseLanguageButton" type="button">Language</button>
+                <button id="pauseExitButton" type="button">Exit</button>
+            </section>
+            <section class="screen-card" data-screen="pause-options" hidden>
+                <h1 id="pauseOptionsTitle">Options</h1>
+                <button id="pauseSoundButton" type="button">Sound: Off</button>
+                <button id="pauseMusicButton" type="button">Music: Off</button>
+                <button id="pauseOptionsBackButton" type="button">Back</button>
+            </section>
+            <section class="screen-card" data-screen="pause-language" hidden>
+                <h1 id="pauseLanguageTitle">Language</h1>
+                <button id="pauseEnglishButton" type="button">English</button>
+                <button id="pauseArabicButton" type="button">العربية</button>
+                <button id="pauseLanguageBackButton" type="button">Back</button>
+            </section>
+            <section class="screen-card" data-screen="help" hidden>
+                <h1 id="helpTitle">Your mission</h1>
+                <p id="helpText"></p>
+                <p id="helpControls"></p>
+                <button id="closeHelpButton" type="button">Return to game</button>
+            </section>
+            <section class="screen-card" data-screen="result" hidden>
+                <h1 id="resultTitle"></h1>
+                <p id="resultText"></p>
+                <button id="replayButton" type="button">Play again</button>
+                <button id="resultMenuButton" type="button">Main menu</button>
+            </section>
+            <section class="screen-card" data-screen="exit" hidden>
+                <h1 id="exitTitle">Thanks for playing</h1>
+                <p id="exitText"></p>
+                <button id="returnMenuButton" type="button">Main menu</button>
+            </section>
+        </div>
+        <p id="audioStatus" class="visually-hidden" role="status" aria-live="polite"></p>
+    </main>
     <script type="module" src="js/main.js"></script>
 </body>
 </html>

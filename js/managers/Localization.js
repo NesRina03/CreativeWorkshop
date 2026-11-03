@@ -1,71 +1,147 @@
 const translations = {
     en: {
-        gameSettings: 'Game settings',
-        language: 'العربية',
-        languageLabel: 'Switch language to Arabic',
+        title: 'Ghostbusters: The Lost Formulas',
+        play: 'Play',
+        options: 'Options',
+        language: 'Language',
+        exit: 'Exit',
+        back: 'Back',
+        resume: 'Resume',
+        restart: 'Restart',
+        mainMenu: 'Main menu',
         soundOff: 'Sound: Off',
         soundOn: 'Sound: On',
-        soundLabel: 'Toggle sound effects',
         musicOff: 'Music: Off',
         musicOn: 'Music: On',
-        musicLabel: 'Toggle music',
+        lensOff: 'Lens: Off',
+        lensOn: 'Lens: On',
+        backpack: 'Backpack',
+        formulas: 'Formulas',
+        time: 'Time',
+        missionTitle: 'Your mission',
+        mission: 'Catch all the ghosts before time runs out. Ghosts hide behind a distorted lens view. Find the right formula, store it in your backpack, then use it to reveal each ghost before you catch it.',
+        controls: 'W/S walk · A/D strafe · Drag on scene or Left/Right look · F collect/use · L lens · B backpack · H help · Click to catch · Esc pause',
+        continue: 'Continue',
+        skipHint: 'Press Enter to skip',
+        returnToGame: 'Return to game',
+        paused: 'Paused',
+        wrongFormula: 'Wrong formula. {chances} chances left.',
+        noFormula: 'Collect formulas and select one from your backpack first.',
+        activateLens: 'Activate your lens to see ghosts.',
+        collectPrompt: 'Press F to collect {formula}.',
+        usePrompt: 'Press F to try the selected formula on this ghost.',
+        aimPrompt: 'Aim at the revealed ghost and click to catch it.',
+        noTarget: 'No ghost or formula in front of you.',
+        scanning: 'The formula is scanning…',
+        collected: '{formula} added to your backpack.',
+        pickedUpTitle: 'Formula collected',
+        closePickup: 'Continue',
+        selected: 'Selected',
+        noFormulas: 'No formulas collected yet.',
+        formulaDetailHint: 'Choose a collected formula to see its name, purpose, and kernel.',
+        applyFormula: 'Equip this formula',
+        formulaEquipped: 'Selected for the lens',
+        kernel: 'Formula grid',
+        caught: 'caught',
+        remaining: 'left',
+        winTitle: 'Mansion cleared!',
+        winText: 'You caught every ghost before time ran out.',
+        loseTitle: 'The ghosts got away',
+        loseText: 'The mission failed. Restart and try another formula.',
+        outOfTriesTitle: 'Two wrong formulas',
+        outOfTriesText: 'This ghost escaped after two incorrect choices.',
+        exitTitle: 'Thanks for playing',
+        exitText: 'You can return to the menu or leave the game page.',
         audioError: 'Audio is not available in this browser.',
-        title: 'Ghost Game'
+        ghostNames: ['The Blur', 'The Static', 'The Veil', 'The Relief', 'The Split'],
+        formulaNames: ['Spectral Clarity', 'Static Eater', 'Boundary Seeker', 'Phantom Engraver', 'Rift Finder'],
+        formulaDescriptions: [
+            'Sharpens a blurry image.',
+            'Smooths away visual specks.',
+            'Finds and highlights edges.',
+            'Adds light and shadow to reveal shape.',
+            'Highlights vertical breaks and edges.'
+        ]
     },
-    ar: {
-        gameSettings: 'إعدادات اللعبة',
-        language: 'English',
-        languageLabel: 'Switch language to English',
-        soundOff: 'المؤثرات: متوقفة',
-        soundOn: 'المؤثرات: تعمل',
-        soundLabel: 'تشغيل أو إيقاف المؤثرات الصوتية',
-        musicOff: 'الموسيقى: متوقفة',
-        musicOn: 'الموسيقى: تعمل',
-        musicLabel: 'تشغيل أو إيقاف الموسيقى',
-        audioError: 'الصوت غير متاح في هذا المتصفح.',
-        title: 'لعبة الشبح'
+    'ar-DZ': {
+        title: 'صيّاد الأشباح: الصيغ الضايعة',
+        play: 'إلعب',
+        options: 'الخيارات',
+        language: 'اللغة',
+        exit: 'خروج',
+        back: 'رجوع',
+        resume: 'كمّل',
+        restart: 'عاود من اللول',
+        mainMenu: 'القائمة الرئيسية',
+        soundOff: 'الصوت: طافي',
+        soundOn: 'الصوت: يخدم',
+        musicOff: 'الموسيقى: طافية',
+        musicOn: 'الموسيقى: تخدم',
+        lensOff: 'العدسة: طافية',
+        lensOn: 'العدسة: تخدم',
+        backpack: 'الحقيبة',
+        formulas: 'الصيغ',
+        time: 'الوقت',
+        missionTitle: 'مهمّتك',
+        mission: 'شدّ كامل الأشباح قبل ما يسالي الوقت. الأشباح يبانوا مغبّشين بالعدسة. قلّب على الصيغة الصح، خزّنها في الحقيبة، واستعملها باش تكشف كل شبح قبل ما تشدّو.',
+        controls: 'W/S تمشي · A/D تزلق · جرّ الفأرة فوق المشهد ولا السهمين باش تشوف · F تدي/تستعمل · L العدسة · B الحقيبة · H المساعدة · كليك تشدّ · Esc توقف',
+        continue: 'كمّل',
+        skipHint: 'إضغط Enter باش تفوت',
+        returnToGame: 'إرجع للعبة',
+        paused: 'اللعبة واقفة',
+        wrongFormula: 'الصيغة غالطة. بقالك {chances} محاولات.',
+        noFormula: 'دي الصيغ واختار وحدة من الحقيبة اللّول.',
+        activateLens: 'شغّل العدسة باش تشوف الأشباح.',
+        collectPrompt: 'إضغط F باش تدي {formula}.',
+        usePrompt: 'إضغط F باش تجرّب الصيغة على هاذ الشبح.',
+        aimPrompt: 'صوّب للشبح اللي بان وإضغط باش تشدّو.',
+        noTarget: 'ما كاين لا شبح لا صيغة قدّامك.',
+        scanning: 'الصيغة راهي تكشف…',
+        collected: 'زدنا {formula} للحقيبة.',
+        pickedUpTitle: 'ديت الصيغة',
+        closePickup: 'كمّل',
+        selected: 'مختارة',
+        noFormulas: 'ما جمعت حتى صيغة مزال.',
+        formulaDetailHint: 'إختار صيغة باش تشوف سميتها، خدمتها والشبكة تاعها.',
+        applyFormula: 'إستعمل هاذ الصيغة',
+        formulaEquipped: 'مختارة للعدسة',
+        kernel: 'شبكة الصيغة',
+        caught: 'مشدو',
+        remaining: 'باقي',
+        winTitle: 'نقّيت القصر!',
+        winText: 'شدّيت كامل الأشباح قبل ما يسالي الوقت.',
+        loseTitle: 'الأشباح هربوا',
+        loseText: 'المهمّة ما نجحاتش. عاود وجرّب صيغة أخرى.',
+        outOfTriesTitle: 'زوج صيغ غالطين',
+        outOfTriesText: 'هاذ الشبح هرب من بعد زوج محاولات غالطين.',
+        exitTitle: 'صحّيت على اللعب',
+        exitText: 'تقدر ترجع للقائمة ولا تخرج من صفحة اللعبة.',
+        audioError: 'الصوت ما يخدمش في هاذ المتصفح.',
+        ghostNames: ['الشبح المغبّش', 'شبح النقاط', 'شبح الستار', 'شبح الظل', 'شبح الشقوق'],
+        formulaNames: ['وضوح الأشباح', 'آكل النقاط', 'كاشف الحدود', 'نقّاش الأشباح', 'كاشف الشقوق'],
+        formulaDescriptions: [
+            'يوضّح الصورة المغبّشة.',
+            'ينحّي النقط ويخلّي الصورة ملساء.',
+            'يلقى الحواف ويبيّنهم.',
+            'يبيّن الشكل بالضو والظل.',
+            'يبيّن الشقوق والحواف العمودية.'
+        ]
     }
 };
 
 export class Localization {
-    constructor(audioManager){
-        this.audioManager = audioManager;
-        this.language = localStorage.getItem('ghost-game-language') === 'ar' ? 'ar' : 'en';
+    constructor(){
+        const savedLanguage = localStorage.getItem('ghost-game-language');
+        this.language = savedLanguage === 'ar' || savedLanguage === 'ar-DZ' ? 'ar-DZ' : 'en';
         this.text = translations[this.language];
     }
 
     setLanguage(language){
-        this.language = language;
-        this.text = translations[language];
-        localStorage.setItem('ghost-game-language', language);
-
-        document.documentElement.lang = language;
-        document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+        this.language = translations[language] ? language : 'en';
+        this.text = translations[this.language];
+        localStorage.setItem('ghost-game-language', this.language);
+        document.documentElement.lang = this.language;
+        document.documentElement.dir = this.language === 'ar-DZ' ? 'rtl' : 'ltr';
         document.title = this.text.title;
-        document.querySelector('#gameToolbar').setAttribute('aria-label', this.text.gameSettings);
-        this.updateControls();
-    }
-
-    updateControls(){
-        const languageButton = document.getElementById('languageButton');
-        const soundButton = document.getElementById('soundButton');
-        const musicButton = document.getElementById('musicButton');
-
-        languageButton.textContent = this.text.language;
-        languageButton.setAttribute('aria-label', this.text.languageLabel);
-        soundButton.textContent = this.soundButtonText;
-        soundButton.setAttribute('aria-label', this.text.soundLabel);
-        soundButton.setAttribute('aria-pressed', String(this.audioManager.soundEnabled));
-        musicButton.textContent = this.musicButtonText;
-        musicButton.setAttribute('aria-label', this.text.musicLabel);
-        musicButton.setAttribute('aria-pressed', String(this.audioManager.musicEnabled));
-    }
-
-    get soundButtonText(){
-        return this.audioManager.soundEnabled ? this.text.soundOn : this.text.soundOff;
-    }
-
-    get musicButtonText(){
-        return this.audioManager.musicEnabled ? this.text.musicOn : this.text.musicOff;
     }
 }

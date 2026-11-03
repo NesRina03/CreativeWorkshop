@@ -1,38 +1,39 @@
-import { GAME_WIDTH, GAME_HEIGHT } from "../core/constants.js";
+const PLAYER_RADIUS = 0.18;
 
 export class Player {
-    constructor(){
-        this.width = 128;
-        this.height = 128;
-
-        this.x = (GAME_WIDTH - this.width) / 2;
-        this.y = (GAME_HEIGHT - this.height) / 2;
-
-        this.speed = 300;
-
-        // Multipliers (for upgrades)
-        this.speedMultiplier = 1;
+    constructor(start = { x: 1.5, y: 1.5 }){
+        this.x = start.x;
+        this.y = start.y;
+        this.angle = 0;
+        this.speed = 2.4;
+        this.turnSpeed = 2.2;
     }
-    update(dt, keys){
-        let dx = 0, dy = 0;
 
-        if (keys['w'] || keys['arrowup']) dy -= 1;
-        if (keys['s'] || keys['arrowdown']) dy += 1;
-        if (keys['a'] || keys['arrowleft']) dx -= 1;
-        if (keys['d'] || keys['arrowright']) dx += 1;
+    update(dt, keys, world){
+        if (keys.arrowleft) this.angle -= this.turnSpeed * dt;
+        if (keys.arrowright) this.angle += this.turnSpeed * dt;
 
-        // Normalize diagonal movement
-        if (dx || dy){
-            const len = Math.sqrt(dx * dx + dy * dy);
-            dx /= len;
-            dy /= len;
+        const forward = Number(Boolean(keys.w || keys.arrowup)) - Number(Boolean(keys.s || keys.arrowdown));
+        const strafe = Number(Boolean(keys.d)) - Number(Boolean(keys.a));
+        const magnitude = Math.hypot(forward, strafe);
+        if (!magnitude) return false;
 
-            this.x += dx * this.speed * this.speedMultiplier * dt;
-            this.y += dy * this.speed * this.speedMultiplier * dt;
+        const forwardX = Math.cos(this.angle);
+        const forwardY = Math.sin(this.angle);
+        const rightX = -forwardY;
+        const rightY = forwardX;
+        const dx = (forwardX * forward + rightX * strafe) / magnitude * this.speed * dt;
+        const dy = (forwardY * forward + rightY * strafe) / magnitude * this.speed * dt;
+        let moved = false;
+
+        if (dx !== 0 && world.canOccupy(this.x + dx, this.y, PLAYER_RADIUS)){
+            this.x += dx;
+            moved = true;
         }
-        // Keep player in bounds
-        this.x = Math.max(0, Math.min(GAME_WIDTH - this.width, this.x));
-        this.y = Math.max(0, Math.min(GAME_HEIGHT - this.height, this.y));
-
+        if (dy !== 0 && world.canOccupy(this.x, this.y + dy, PLAYER_RADIUS)){
+            this.y += dy;
+            moved = true;
+        }
+        return moved;
     }
 }
