@@ -126,6 +126,20 @@ function drawParticles() {
     }
   }
 }
+/* sliding 3x3 window: pixels already scanned show the TRUE ghost, the rest still show the distorted one */
+const SCAN_BUF = new Uint32Array(SPR * SPR);
+function scanSpr(g, fr, eye) {
+  const tru = ghostSpr(g.type, 0, fr, eye), dis = ghostSpr(g.type, 1, fr, 0), N = SPR * SPR;
+  const pos = clamp(((g.rt / REVEAL_T) * N) | 0, 0, N - 1);
+  for (let i = 0; i < N; i++) SCAN_BUF[i] = i < pos ? tru[i] : dis[i];
+  const c = SPELLS[g.type].rgb, col = 0xFF000000 | (c[2] << 16) | (c[1] << 8) | c[0];
+  const wx = pos % SPR, wy = (pos / SPR) | 0;
+  for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+    const x = wx + dx, y = wy + dy; if (x < 0 || y < 0 || x >= SPR || y >= SPR) continue;
+    SCAN_BUF[y * SPR + x] = (dx === 0 && dy === 0) ? 0xFFFFFFFF : col;
+  }
+  return SCAN_BUF;
+}
 function renderFrame(cm, lensOn, time, wtime, interactive) {
   cam.x = cm.x; cam.y = cm.y; cam.a = cm.a; cam.dx = Math.cos(cm.a); cam.dy = Math.sin(cm.a);
   renderWorld(lensOn, time, wtime);
@@ -152,8 +166,8 @@ function renderFrame(cm, lensOn, time, wtime, interactive) {
       const form = g.state === 'hidden' ? 1 : 0;
       let eye = 0;
       if (g.type === 2 && form === 0) { const rx = g.x - cam.x, ry = g.y - cam.y, ty = cam.dx * rx + cam.dy * ry; if (ty > 0.1) eye = clamp(Math.round(-(-cam.dy * rx + cam.dx * ry) / ty * 2.2), -1, 1); }
-      const spr = ghostSpr(g.type, form, fr, eye);
-      const o = { alpha: clamp((LENS_RANGE - it.d) / 2.5, 0, 1) * (g.state === 'revealed' ? 0.96 : 0.82) };
+      const spr = g.state === 'revealing' ? scanSpr(g, fr, eye) : ghostSpr(g.type, form, fr, eye);
+      const o = { alpha: clamp((LENS_RANGE - it.d) / 2.5, 0, 1) * ((g.state === 'revealed' || g.state === 'revealing') ? 0.96 : 0.82) };
       let sc = gp.scale, ex = 0;
       if (g.state === 'capturing') {
         const k = g.ct / 0.9; o.flash = (((g.ct * 14) | 0) & 1) ? [255, 255, 255, 0.85] : [GHOSTS[g.type].rgb[0], GHOSTS[g.type].rgb[1], GHOSTS[g.type].rgb[2], 0.6];
@@ -173,7 +187,7 @@ function renderFrame(cm, lensOn, time, wtime, interactive) {
   if (interactive && lensOn) {
     let best = null;
     for (const g of G.ghosts) {
-      const r = g.sr; if (!r || g.state === 'capturing') continue;
+      const r = g.sr; if (!r || g.state === 'capturing' || g.state === 'revealing') continue;
       const cxp = r.left + r.size * GPAR[g.type].cx;
       if (Math.abs(W / 2 - cxp) > r.size * GPAR[g.type].hw) continue;
       if (HALF < r.top + r.size * 0.06 || HALF > r.top + r.size * 0.97) continue;
@@ -204,4 +218,3 @@ function render() {
   }
   renderFrame(cm, lensOn, G.state === 'playing' ? G.wt : (interactive ? G.wt : G.t), wt, interactive);
 }
-

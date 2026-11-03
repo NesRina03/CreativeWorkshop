@@ -23,7 +23,7 @@ function buildHUD() {
     d.insertAdjacentHTML('beforeend', '<div class="n" id="gcn' + i + '">0/0</div><div class="l" id="gcl' + i + '"></div>');
     el.gc.appendChild(d);
   });
-  $('spellCountImg').src = RUNE_URL[0]; $('bookImg').src = ICON.book; $('helpImg').src = ICON.help; $('pauseImg').src = ICON.pause;
+  $('spellCountImg').src = RUNE_URL[0]; $('bookImg').src = ICON.book; $('mapImg').src = ICON.map; $('pauseImg').src = ICON.pause;
 }
 function hudGhosts() {
   for (let i = 0; i < 5; i++) {
@@ -46,9 +46,40 @@ function hudLens() {
 }
 function hudStatic() {
   $('keyhint').textContent = tr('keys');
-  el.lens.title = tr('tipLens'); $('btnBook').title = tr('tipBook'); $('btnHelp').title = tr('tipHelp'); $('btnPause').title = tr('tipPause');
+  el.lens.title = tr('tipLens'); $('btnBook').title = tr('tipBook'); $('btnMap').title = tr('tipMap'); $('btnPause').title = tr('tipPause');
 }
 function hudAll() { hudGhosts(); hudTimer(); hudSpells(); hudLens(); hudStatic(); }
+/* ---- minimap: the whole map is visible from the start, only the player marker moves ---- */
+const MM = { S: 6, cv: $('minimap'), base: null, on: false };
+MM.cx = MM.cv.getContext('2d');
+MM.cv.classList.add('hidden');                      // hidden until the player presses M
+function toggleMap() {
+  if (G.state !== 'playing') return;
+  MM.on = !MM.on; MM.cv.classList.toggle('hidden', !MM.on); $('btnMap').classList.toggle('off', !MM.on); sfx('ui');
+}
+function buildMinimap() {
+  const S = MM.S, b = mkCanvas(MW * S, MH * S), x = b.getContext('2d');
+  for (let j = 0; j < MH; j++) for (let i = 0; i < MW; i++) {
+    const k = j * MW + i;
+    if (MAP[k]) { x.fillStyle = '#7a5230'; x.fillRect(i * S, j * S, S, S); x.fillStyle = '#a8774a'; x.fillRect(i * S, j * S, S, 1); x.fillStyle = '#4a2e18'; x.fillRect(i * S, j * S + S - 1, S, 1); }
+    else { x.fillStyle = RUG[k] ? '#4a1822' : '#1e1420'; x.fillRect(i * S, j * S, S, S); }
+  }
+  MM.base = b;
+}
+function drawMinimap() {
+  if (!MM.on) return;
+  if (!MM.base) buildMinimap();
+  const c = MM.cx, S = MM.S, px = P.x * S, py = P.y * S, a = P.a, pulse = 0.5 + 0.5 * Math.sin(G.t * 6);
+  c.drawImage(MM.base, 0, 0);
+  c.lineWidth = 1; c.strokeStyle = 'rgba(255,233,120,' + (0.25 + 0.35 * pulse).toFixed(2) + ')';
+  c.beginPath(); c.arc(px, py, 5 + pulse * 2, 0, TAU); c.stroke();
+  c.fillStyle = '#ffe94a'; c.strokeStyle = '#000'; c.lineWidth = 1.5;
+  c.beginPath();
+  c.moveTo(px + Math.cos(a) * 6, py + Math.sin(a) * 6);
+  c.lineTo(px + Math.cos(a + 2.5) * 4.5, py + Math.sin(a + 2.5) * 4.5);
+  c.lineTo(px + Math.cos(a - 2.5) * 4.5, py + Math.sin(a - 2.5) * 4.5);
+  c.closePath(); c.stroke(); c.fill();
+}
 let lastPrompt = '';
 function updatePrompt() {
   let p = '';
@@ -178,8 +209,8 @@ function renderBook() {
 function castSpell() {
   const g = G.bookGhost; if (G.state !== 'book' || !g || !G.collected[G.sel]) return;
   if (G.sel === g.type) {
-    g.state = 'revealed'; sfx('correct'); flashFx(SPELLS[G.sel].rgb); burst(g.x, g.y, 0.45, SPELLS[G.sel].rgb, 44);
-    closeBook(); toast(tr('identified'), SPELLS[g.type].color);
+    g.state = 'revealing'; g.rt = 0; sfx('scan'); flashFx(SPELLS[G.sel].rgb);
+    closeBook(); toast(tr('scanning'), SPELLS[g.type].color);
   } else {
     g.wrong++; sfx('wrong'); $('bkMsg').textContent = tr('wrong'); toast(tr('wrong'), '#ff4a4a');
     if (g.wrong >= 2) { hideScreens(); G.bookGhost = null; loseGame('spells'); }
@@ -291,56 +322,35 @@ Object.assign(L.ar, {
 const LESSON = [
   { does: { en: 'Every pixel becomes a weighted average of its neighbors, and the center counts the most. The weights add up to 16, so we divide by 16 to keep the brightness.',
             ar: 'يصبح كل بكسل متوسطًا مرجّحًا لجيرانه، ويحظى المركز بأكبر وزن. مجموع الأوزان 16، لذلك نقسم على 16 للحفاظ على السطوع.' },
-    effect: { en: 'The Wandering Wraith melts into a soft, hazy glow. Sharp edges and fine details disappear.',
-              ar: 'يذوب الشبح الهائم ويتحول إلى توهج ناعم ضبابي، وتختفي الحواف الحادة والتفاصيل الدقيقة.' } },
+    effect: { en: 'Before, the Wandering Wraith looked fuzzy and foggy. The Gaussian Veil matched it and revealed its true shape.',
+              ar: 'قبل التعويذة كان الشبح الهائم يبدو مشوّشًا وضبابيًا. طابقته تعويذة حجاب غاوس وكشفت شكله الحقيقي.' } },
   { does: { en: 'The center is boosted (5) and the four direct neighbors are subtracted (-1 each). Wherever a pixel differs from its neighbors, that difference is exaggerated.',
             ar: 'يُضخَّم المركز (5) وتُطرح البكسلات الأربعة المجاورة (-1 لكل منها). فكلما اختلف البكسل عن جيرانه تضخّم هذا الفرق.' },
-    effect: { en: 'The Crimson Reaper becomes crisper: its edges and glowing eyes stand out with more contrast.',
-              ar: 'يصبح الحاصد القرمزي أوضح: تبرز حوافه وعيناه المتوهجتان بتباين أكبر.' } },
+    effect: { en: 'Before, the Crimson Reaper looked rough, jagged and sparkly. The Sharpening Rune matched it and revealed its true shape.',
+              ar: 'قبل التعويذة كان الحاصد القرمزي يبدو خشنًا ومسنّنًا ولامعًا. طابقته رونية الشحذ وكشفت شكله الحقيقي.' } },
   { does: { en: 'The center (4) minus its four neighbors. In flat areas the sum is 0 (black). Where brightness changes suddenly, the result is large.',
             ar: 'المركز (4) مطروحًا منه البكسلات الأربعة المجاورة. في المناطق المتجانسة يكون المجموع 0 (أسود)، وعند أي تغيّر مفاجئ في السطوع تكون النتيجة كبيرة.' },
-    effect: { en: 'The Hollow Watcher\'s body vanishes. Only the glowing outline of its shape remains.',
-              ar: 'يختفي جسد المراقب الأجوف ولا يبقى إلا محيط شكله المتوهج.' } },
+    effect: { en: 'Before, the Hollow Watcher looked like glowing lines and dots. The Edge Seeker matched it and revealed its true shape.',
+              ar: 'قبل التعويذة كان المراقب الأجوف يبدو كخطوط ونقاط متوهجة. طابقه باحث الحواف وكشف شكله الحقيقي.' } },
   { does: { en: 'The weights are negative on one diagonal and positive on the opposite one, so the result measures brightness change in one direction. A constant is added so flat areas look mid-gray.',
             ar: 'الأوزان سالبة على قطر وموجبة على القطر المقابل، فتقيس النتيجة تغيّر السطوع في اتجاه واحد. وتُضاف قيمة ثابتة كي تظهر المناطق المتجانسة رمادية.' },
-    effect: { en: 'The Engraved Phantom looks carved out of stone, as if lit from one side.',
-              ar: 'يبدو الشبح المنقوش وكأنه محفور في الحجر ومضاء من جهة واحدة.' } },
+    effect: { en: 'Before, the Engraved Phantom looked gray and carved from stone. The Emboss Curse matched it and revealed its true shape.',
+              ar: 'قبل التعويذة كان الشبح المنقوش يبدو رماديًا ومحفورًا في الحجر. طابقته لعنة النقش البارز وكشفت شكله الحقيقي.' } },
   { does: { en: 'Only one column of weights is non-zero, so each pixel is averaged with its neighbors along a single direction (divided by 3).',
             ar: 'عمود واحد فقط من الأوزان غير صفري، فيُحسب متوسط كل بكسل مع جيرانه في اتجاه واحد (القسمة على 3).' },
-    effect: { en: 'The Phantom Drifter smears into a streak, as if it were racing past.',
-              ar: 'يتمدد الشبح الجوّال على شكل أثر كأنه يندفع بسرعة.' } }
+    effect: { en: 'Before, the Phantom Drifter left a long smeared trail. The Phantom Trail matched it and revealed its true shape.',
+              ar: 'قبل التعويذة كان الشبح الجوّال يترك خلفه أثرًا ممتدًا. طابقه أثر الشبح وكشف شكله الحقيقي.' } }
 ];
 const EN = { idx: 0, pos: -40, img: {} };
 const enB = $('enB'), enA = $('enA'), ebx = enB.getContext('2d'), eax = enA.getContext('2d');
 ebx.imageSmoothingEnabled = false; eax.imageSmoothingEnabled = false;
 const EN_BG = 'rgb(14,8,22)';
 
-// builds "before" (true ghost sprite) and "after" (real convolution of it with the spell kernel)
+// "before" = the distorted ghost the player saw, "after" = its true form revealed by the right spell
 function lessonImgs(i) {
   if (EN.img[i]) return EN.img[i];
-  const before = mkCanvas(SPR, SPR), bx = before.getContext('2d');
-  bx.fillStyle = EN_BG; bx.fillRect(0, 0, SPR, SPR); bx.drawImage(ghostCanvas(i, 0, 0, 0), 0, 0);
-  const sp = SPELLS[i], k = sp.kernel, div = sp.norm ? +sp.norm.split('/')[1] : 1;
-  const passes = i === 4 ? 3 : 1, bias = i === 3 ? 100 : 0;
-  let cur = bx.getImageData(0, 0, SPR, SPR).data;
-  for (let p = 0; p < passes; p++) {
-    const out = new Uint8ClampedArray(cur.length), last = p === passes - 1;
-    for (let y = 0; y < SPR; y++) for (let x = 0; x < SPR; x++) {
-      const o = (y * SPR + x) * 4;
-      for (let ch = 0; ch < 3; ch++) {
-        let s = 0;
-        for (let ky = -1; ky <= 1; ky++) for (let kx = -1; kx <= 1; kx++)
-          s += k[(ky + 1) * 3 + kx + 1] * cur[(clamp(y + ky, 0, SPR - 1) * SPR + clamp(x + kx, 0, SPR - 1)) * 4 + ch];
-        s /= div;
-        if (last) { if (i === 2) s = Math.abs(s) * 1.2; s += bias; }
-        out[o + ch] = s;
-      }
-      out[o + 3] = 255;
-    }
-    cur = out;
-  }
-  const after = mkCanvas(SPR, SPR); after.getContext('2d').putImageData(new ImageData(cur, SPR, SPR), 0, 0);
-  return (EN.img[i] = { before, after });
+  const mk = (form) => { const c = mkCanvas(SPR, SPR), x = c.getContext('2d'); x.fillStyle = EN_BG; x.fillRect(0, 0, SPR, SPR); x.drawImage(ghostCanvas(i, form, 0, 0), 0, 0); return c; };
+  return (EN.img[i] = { before: mk(1), after: mk(0) });
 }
 function startEnding() {
   G.state = 'ending'; releasePointer(); G.t = 0; el.hud.classList.add('hidden'); el.lensFx.classList.remove('on');
@@ -374,7 +384,7 @@ function fillEnding() {
   } else {
     t.textContent = sp.name[lang]; op.textContent = sp.op[lang];
     $('enMx').innerHTML = matrixHTML(sp, false);
-    note.textContent = (sp.norm ? tr('normLbl') + ': ' + sp.norm : '') + (gi === 4 ? '\n' + tr('enPasses') : '');
+    note.textContent = (sp.norm ? tr('normLbl') + ': ' + sp.norm : '');
     note.style.whiteSpace = 'pre-line';
     $('enL1').textContent = tr('enL1'); $('enT1').textContent = LESSON[gi].does[lang];
     $('enL2').textContent = tr('enL2'); $('enT2').textContent = LESSON[gi].effect[lang];

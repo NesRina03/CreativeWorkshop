@@ -22,7 +22,7 @@ bind('bkCast', castSpell);
 bind('btnLens', toggleLens);
 bind('btnBook', () => { if (G.state === 'playing') openBook(); else if (G.state === 'book') closeBook(); });
 bind('btnPause', openPause);
-bind('btnHelp', () => { if (G.state === 'playing') startCutscene('help'); });
+bind('btnMap', toggleMap);
 $('cutscene').addEventListener('click', () => { AU.init(); csAdvance(); });
 $('volSfx').addEventListener('input', (e) => { G.sfxVol = e.target.value / 100; AU.vol.sfx = G.sfxVol; AU.setVol(); $('vSfxTxt').textContent = e.target.value; save(); });
 $('volSfx').addEventListener('change', () => sfx('ui'));
@@ -45,6 +45,8 @@ window.addEventListener('keydown', (e) => {
       if (c === 'KeyF') collectSpell();
       else if (c === 'KeyL') toggleLens();
       else if (c === 'KeyB') openBook();
+      else if (c === 'KeyM') toggleMap();
+      else if (c === 'KeyH') startCutscene('help');
       else if (c === 'Escape') openPause();
       else if (c === 'Space') shoot();
       else if (c === 'Tab') releasePointer();
@@ -89,6 +91,7 @@ function frame(now) {
     if (G.shotT > 0) G.shotT -= dt;
     if (G.state === 'ending') updateEnding(dt);
     render();
+    if (!el.hud.classList.contains('hidden')) drawMinimap();
     if (G.state === 'playing') el.clickHint.textContent = document.pointerLockElement === view ? '' : tr('clickHint');
     else el.clickHint.textContent = '';
     el.crosshair.classList.toggle('off', G.state !== 'playing');

@@ -67,6 +67,7 @@ const AU = (() => {
     win: () => [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone(f, 0.32, 'square', 0.09, 0, i * 0.13)),
     lose: () => [392, 349, 311, 262, 196].forEach((f, i) => tone(f, 0.5, 'sawtooth', 0.1, 0.97, i * 0.22)),
     book: () => noise(0.18, 0.08, 'bandpass', 2200, 0, 0.3),
+    scan: () => { tone(260, 0.9, 'square', 0.05, 4); noise(0.9, 0.04, 'bandpass', 1200, 0, 3); },
     creak: () => { const f = 60 + Math.random() * 50; tone(f, 1.1, 'sawtooth', 0.04, 1.5); tone(f * 1.51, 1.0, 'sawtooth', 0.02, 1.4, 0.05); },
     whisper: () => { const f = 1800 + Math.random() * 1500; noise(1.3, 0.06, 'bandpass', f, 0, 0.5); noise(1.0, 0.04, 'bandpass', f * 1.4, 0.3, 0.6); },
     flicker: () => { noise(0.08, 0.06, 'highpass', 5000); noise(0.06, 0.05, 'highpass', 6000, 0.12); },
@@ -75,4 +76,3 @@ const AU = (() => {
   return { init, setVol, vol, play(n) { if (ctx && SFX[n]) SFX[n](); }, resume() { if (ctx && ctx.state === 'suspended') ctx.resume(); } };
 })();
 const sfx = (n) => AU.play(n);
-

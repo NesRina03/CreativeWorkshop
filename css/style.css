@@ -166,3 +166,5 @@ input[type=range]::-moz-range-thumb{width:20px;height:28px;background:#d8a040;bo
 .enBtns{display:flex;gap:12px}
 #enCount{font-size:9px;color:#cdb98e}
 .enNav .btn.small{min-width:130px}
+/* ---------- minimap ---------- */
+#minimap{position:absolute;right:16px;bottom:16px;width:192px;height:144px;box-sizing:content-box;image-rendering:pixelated;background:#0d070a;border:3px solid #000;box-shadow:0 0 0 3px #6b4a2f,0 0 0 6px #000;opacity:.92}

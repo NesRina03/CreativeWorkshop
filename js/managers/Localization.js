@@ -8,11 +8,11 @@ const L = {
     sound: 'SOUND', music: 'MUSIC', resume: 'RESUME', restart: 'RESTART', mainMenu: 'MAIN MENU', paused: 'PAUSED',
     skip: 'Press ENTER to skip', next: 'SPACE / CLICK: next', cont: 'CONTINUE',
     spellFound: 'SPELL DISCOVERED', bookTitle: 'SPELLBOOK', cast: 'CAST ON GHOST',
-    left: 'left', tipLens: 'Magical lens [L]', tipBook: 'Spellbook [B]', tipHelp: 'Help / intro', tipPause: 'Pause [ESC]',
-    keys: 'WASD move · MOUSE look · F collect · L lens · B book · CLICK shoot · TAB free cursor',
+    left: 'left', tipLens: 'Magical lens [L]', tipBook: 'Spellbook [B]', tipHelp: 'Help / intro [H]', tipMap: 'Map [M]', tipPause: 'Pause [ESC]',
+    keys: 'WASD move · MOUSE look · F collect · L lens · B book · M map · H help · CLICK shoot · TAB free cursor',
     collect: '[F] Collect Spell', identify: '[B] Open spellbook to identify', shootIt: 'CLICK to capture!',
     lensOn: 'LENS ON', lensOff: 'LENS OFF', wrong: 'WRONG SPELL!', attemptsLeft: 'attempt left',
-    attemptsLbl: 'ATTEMPTS', captured: 'GHOST CAPTURED!', spellGot: 'SPELL COLLECTED!', identified: 'GHOST REVEALED!',
+    attemptsLbl: 'ATTEMPTS', captured: 'GHOST CAPTURED!', spellGot: 'SPELL COLLECTED!', identified: 'GHOST REVEALED!', scanning: 'REVEALING...',
     needReveal: 'Reveal it with the right spell first!', detected: 'GHOST DETECTED!', noGhostLooked: 'Nothing to capture here',
     locked: 'LOCKED', lockedHint: 'Find this spell somewhere in the mansion to unlock it.',
     selectHint: 'Select a spell, then cast it on the ghost.', browseHint: 'Look at a ghost through the lens [L], then open the book to cast.',
@@ -37,11 +37,11 @@ const L = {
     sound: 'الصوت', music: 'الموسيقى', resume: 'متابعة', restart: 'إعادة', mainMenu: 'القائمة الرئيسية', paused: 'إيقاف مؤقت',
     skip: 'اضغط ENTER للتخطي', next: 'SPACE / نقرة: التالي', cont: 'متابعة',
     spellFound: 'تم اكتشاف تعويذة', bookTitle: 'كتاب التعاويذ', cast: 'أطلق التعويذة',
-    left: 'متبقي', tipLens: 'العدسة السحرية [L]', tipBook: 'كتاب التعاويذ [B]', tipHelp: 'مساعدة / المقدمة', tipPause: 'إيقاف مؤقت [ESC]',
-    keys: 'WASD حركة · الفأرة نظر · F جمع · L عدسة · B كتاب · نقرة إطلاق · TAB تحرير المؤشر',
+    left: 'متبقي', tipLens: 'العدسة السحرية [L]', tipBook: 'كتاب التعاويذ [B]', tipHelp: 'مساعدة / المقدمة [H]', tipMap: 'الخريطة [M]', tipPause: 'إيقاف مؤقت [ESC]',
+    keys: 'WASD حركة · الفأرة نظر · F جمع · L عدسة · B كتاب · M خريطة · H مساعدة · نقرة إطلاق · TAB تحرير المؤشر',
     collect: '[F] اجمع التعويذة', identify: '[B] افتح الكتاب لتحديد الشبح', shootIt: 'انقر لأسر الشبح!',
     lensOn: 'العدسة: تعمل', lensOff: 'العدسة: متوقفة', wrong: 'تعويذة خاطئة!', attemptsLeft: 'محاولة متبقية',
-    attemptsLbl: 'المحاولات', captured: 'تم أسر الشبح!', spellGot: 'تم جمع التعويذة!', identified: 'تم كشف الشبح!',
+    attemptsLbl: 'المحاولات', captured: 'تم أسر الشبح!', spellGot: 'تم جمع التعويذة!', identified: 'تم كشف الشبح!', scanning: 'جارٍ الكشف...',
     needReveal: 'اكشفه بالتعويذة الصحيحة أولاً!', detected: 'تم رصد شبح!', noGhostLooked: 'لا يوجد ما يمكن أسره هنا',
     locked: 'مقفلة', lockedHint: 'اعثر على هذه التعويذة في القصر لفتحها.',
     selectHint: 'اختر تعويذة ثم أطلقها على الشبح.', browseHint: 'انظر إلى شبح عبر العدسة [L] ثم افتح الكتاب لإطلاق التعويذة.',
@@ -61,4 +61,3 @@ const L = {
     ]
   }
 };
-

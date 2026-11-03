@@ -5,33 +5,33 @@ const SPELLS = [
   { color: '#3d8bff', rgb: [61, 139, 255], kernel: [1, 2, 1, 2, 4, 2, 1, 2, 1], norm: '1/16',
     name: { en: 'THE GAUSSIAN VEIL', ar: 'حجاب غاوس' }, op: { en: 'Gaussian Blur', ar: 'تمويه غاوسي' },
     colorName: { en: 'BLUE', ar: 'أزرق' },
-    fn: { en: 'Smooths an image by reducing high-frequency details and noise.', ar: 'يصقل الصورة بتقليل التفاصيل عالية التردد والضجيج.' },
-    desc: { en: 'The Gaussian Veil softens sharp details and smooths the image by averaging neighboring pixels. It reduces noise and creates a blurred appearance.',
-            ar: 'يلطّف حجاب غاوس التفاصيل الحادة ويصقل الصورة بحساب متوسط البكسلات المجاورة. يقلّل الضجيج ويمنح مظهرًا ضبابيًا.' } },
+    fn: { en: 'Makes things soft and fuzzy, like looking through foggy glass.', ar: 'يجعل الأشياء ناعمة وضبابية، كأنك تنظر من خلف زجاج مغبّش.' },
+    desc: { en: 'Imagine breathing on a window and seeing everything go soft and misty. This spell blurs tiny details until the picture looks smooth and dreamy. Choose it for a ghost that looks fuzzy and foggy.',
+            ar: 'تخيّل أنك تنفخ على النافذة فتبدو الأشياء ناعمة وضبابية. تُذيب هذه التعويذة التفاصيل الصغيرة حتى تبدو الصورة هادئة ومموّهة. اخترها للشبح الذي يبدو مشوّشًا وضبابيًا.' } },
   { color: '#ff3b3b', rgb: [255, 59, 59], kernel: [0, -1, 0, -1, 5, -1, 0, -1, 0], norm: null,
     name: { en: 'THE SHARPENING RUNE', ar: 'رونية الشحذ' }, op: { en: 'Sharpening', ar: 'تحسين الحدة' },
     colorName: { en: 'RED', ar: 'أحمر' },
-    fn: { en: 'Enhances edges and fine details by increasing contrast between neighboring pixels.', ar: 'يعزّز الحواف والتفاصيل الدقيقة بزيادة التباين بين البكسلات المجاورة.' },
-    desc: { en: 'The Sharpening Rune enhances fine details and makes edges more pronounced by increasing the contrast between neighboring pixels.',
-            ar: 'تعزّز رونية الشحذ التفاصيل الدقيقة وتجعل الحواف أوضح بزيادة التباين بين البكسلات المجاورة.' } },
+    fn: { en: 'Makes edges bold and crisp, like tracing a drawing with a marker.', ar: 'يجعل الحواف واضحة وحادة، كأنك ترسم فوق الرسم بقلم عريض.' },
+    desc: { en: 'Like going over a pencil drawing with a thick marker, this spell makes every edge bold and clear. Little details pop out and look extra sharp. Choose it for a ghost that looks rough, jagged and sparkly.',
+            ar: 'كأنك تمرّ بقلم عريض فوق رسم بالرصاص، تجعل هذه التعويذة كل حافة واضحة وقوية. تبرز التفاصيل الصغيرة وتبدو حادة. اخترها للشبح الذي يبدو خشنًا ومسنّنًا ولامعًا.' } },
   { color: '#22e06a', rgb: [34, 224, 106], kernel: [0, -1, 0, -1, 4, -1, 0, -1, 0], norm: null,
     name: { en: 'THE EDGE SEEKER', ar: 'باحث الحواف' }, op: { en: 'Laplacian Edge Detection', ar: 'كشف الحواف اللابلاسي' },
     colorName: { en: 'GREEN', ar: 'أخضر' },
-    fn: { en: 'Detects edges and highlights sudden changes in image intensity.', ar: 'يكشف الحواف ويبرز التغيّرات المفاجئة في شدة الصورة.' },
-    desc: { en: 'The Edge Seeker detects boundaries and sudden changes in brightness, revealing the outlines and contours of objects.',
-            ar: 'يكشف باحث الحواف الحدود والتغيّرات المفاجئة في السطوع، فيُظهر محيط الأشياء وخطوطها.' } },
+    fn: { en: 'Keeps only the outlines, like a coloring-book page.', ar: 'يُبقي الخطوط الخارجية فقط، مثل صفحة تلوين.' },
+    desc: { en: 'This spell erases the colors and keeps only the outlines, like a coloring-book page waiting for crayons. Flat areas turn black and only the borders glow. Choose it for a ghost that looks like glowing lines and dots.',
+            ar: 'تمحو هذه التعويذة الألوان وتُبقي الخطوط الخارجية فقط، مثل صفحة تلوين تنتظر الألوان. تصبح المساحات الممتلئة سوداء وتتوهج الحدود فقط. اخترها للشبح الذي يبدو كخطوط ونقاط متوهجة.' } },
   { color: '#b45cff', rgb: [180, 92, 255], kernel: [-2, -1, 0, -1, 1, 1, 0, 1, 2], norm: null,
     name: { en: 'THE EMBOSS CURSE', ar: 'لعنة النقش البارز' }, op: { en: 'Embossing', ar: 'النقش البارز' },
     colorName: { en: 'PURPLE', ar: 'بنفسجي' },
-    fn: { en: 'Creates a raised, relief-like appearance by emphasizing directional intensity differences.', ar: 'يصنع مظهرًا بارزًا كالنقش بإبراز فروق الشدة الاتجاهية.' },
-    desc: { en: 'The Emboss Curse emphasizes directional differences in an image, creating a relief effect that makes details appear raised or engraved.',
-            ar: 'تُبرز لعنة النقش الفروق الاتجاهية في الصورة وتصنع تأثير بروز يجعل التفاصيل تبدو ناتئة أو منقوشة.' } },
+    fn: { en: 'Makes a picture look carved into stone, with bumps and shadows.', ar: 'يجعل الصورة تبدو محفورة في الحجر، بنتوءات وظلال.' },
+    desc: { en: 'Like pressing a coin into clay, this spell makes the picture look carved into stone, with raised bumps and little shadows. Choose it for a ghost that looks gray and stony, as if it was engraved.',
+            ar: 'كأنك تضغط عملة على الطين، تجعل هذه التعويذة الصورة تبدو منحوتة في الحجر بنتوءات وظلال صغيرة. اخترها للشبح الذي يبدو رماديًا وحجريًا كأنه محفور.' } },
   { color: '#ffd92e', rgb: [255, 217, 46], kernel: [1, 0, 0, 1, 0, 0, 1, 0, 0], norm: '1/3',
     name: { en: 'THE PHANTOM TRAIL', ar: 'أثر الشبح' }, op: { en: 'Motion Blur', ar: 'تمويه الحركة' },
     colorName: { en: 'YELLOW', ar: 'أصفر' },
-    fn: { en: 'Creates a directional blur that makes objects appear to move.', ar: 'يصنع تمويهًا اتجاهيًا يجعل الأجسام تبدو متحركة.' },
-    desc: { en: 'The Phantom Trail creates directional motion blur by averaging pixels along a particular direction, making moving objects appear stretched.',
-            ar: 'يصنع أثر الشبح تمويهًا اتجاهيًا بحساب متوسط البكسلات على طول اتجاه معيّن، فتبدو الأجسام المتحركة ممتدة.' } }
+    fn: { en: 'Smears things into a streak, as if they zoom past very fast.', ar: 'يمدّ الأشياء على شكل أثر كأنها تمرّ بسرعة كبيرة.' },
+    desc: { en: 'Like a photo of a speeding race car, this spell stretches the picture into a streak so it looks like it is zooming by. Choose it for a ghost that leaves a long trail behind it.',
+            ar: 'مثل صورة لسيارة سباق مسرعة، تمدّ هذه التعويذة الصورة على شكل أثر فتبدو وكأنها تندفع. اخترها للشبح الذي يترك خلفه أثرًا طويلًا.' } }
 ];
 // ghost type i is bound to spell i (consistent for the whole game)
 const GHOSTS = [
@@ -304,6 +304,15 @@ function updateGhost(g, dt) {
     return;
   }
   const p = GPAR[g.type];
+  if (g.state === 'revealing') {            // sliding window is scanning the ghost (frozen in place)
+    g.rt += dt;
+    if (g.rt >= REVEAL_T) {
+      g.state = 'revealed'; g.rt = 0;
+      sfx('correct'); flashFx(GHOSTS[g.type].rgb); burst(g.x, g.y, 0.45, GHOSTS[g.type].rgb, 44);
+      toast(tr('identified'), GHOSTS[g.type].color);
+    }
+    return;
+  }
   if (g.vis) emitGhostParticles(g);
   if (p.speed <= 0) return;
   if (g.wait > 0) { g.wait -= dt; return; }

@@ -24,6 +24,12 @@ function buildIcons() {
   ICON.help = mkIcon(16, (x) => {
     const c = '#ecdcb8'; P1(x, c, 5, 2, 6, 2); P1(x, c, 4, 4, 2, 2); P1(x, c, 10, 4, 2, 3); P1(x, c, 8, 7, 3, 2); P1(x, c, 7, 9, 2, 2); P1(x, c, 7, 12, 2, 2);
   });
+  ICON.map = mkIcon(16, (x) => {
+    P1(x, '#2a1408', 1, 2, 14, 12); P1(x, '#e8d6a0', 2, 3, 12, 10);
+    P1(x, '#c9b078', 5, 3, 1, 10); P1(x, '#c9b078', 10, 3, 1, 10);                 // folds
+    P1(x, '#6a3a1a', 3, 10); P1(x, '#6a3a1a', 4, 9); P1(x, '#6a3a1a', 6, 9); P1(x, '#6a3a1a', 7, 8); P1(x, '#6a3a1a', 8, 7); // dotted path
+    P1(x, '#c02020', 11, 5); P1(x, '#c02020', 13, 5); P1(x, '#c02020', 12, 6); P1(x, '#c02020', 11, 7); P1(x, '#c02020', 13, 7); // X marks the spot
+  });
   ICON.lock = mkIcon(16, (x) => {
     P1(x, '#8a8a96', 3, 7, 10, 8); P1(x, '#5a5a66', 3, 14, 10, 1); P1(x, '#a8a8b4', 5, 2, 6, 1); P1(x, '#a8a8b4', 5, 3, 2, 4); P1(x, '#a8a8b4', 9, 3, 2, 4);
     P1(x, '#1a1a22', 7, 9, 2, 3);
@@ -34,4 +40,3 @@ function buildIcons() {
   });
   ICON.skull = skull('#e8e8e8', '#20181c'); ICON.skullOff = skull('#4a4048', '#1a1418');
 }
-
