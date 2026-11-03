@@ -45,7 +45,7 @@ window.addEventListener('keydown', (e) => {
       if (c === 'KeyF') collectSpell();
       else if (c === 'KeyL') toggleLens();
       else if (c === 'KeyB') openBook();
-      else if (c === 'KeyM') toggleMap();
+      else if (c === 'KeyM' || e.key.toLowerCase() === 'm') toggleMap();
       else if (c === 'KeyH') startCutscene('help');
       else if (c === 'Escape') openPause();
       else if (c === 'Space') shoot();
