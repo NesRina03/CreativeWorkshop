@@ -9,6 +9,7 @@
      4. Audio                          10. Rendering (raycaster, sprites, FX)
      5. Map, textures, lightmap        11. UI (HUD, book, panels, cutscene)
      6. Collision                      12. Input & main loop
+   (+ ENDING lesson block, just before the stage/fit code in section 12)
    ========================================================================= */
 (function () {
 
@@ -1083,7 +1084,7 @@ function renderFrame(cm, lensOn, time, wtime, interactive) {
 }
 function render() {
   let cm = P, lensOn = G.lens, interactive = true, wt = G.wt;
-  if (G.state === 'menu' || G.state === 'win' || G.state === 'lose' || G.state === 'bye') {
+  if (G.state === 'menu' || G.state === 'win' || G.state === 'lose' || G.state === 'bye' || G.state === 'ending') {
     const t = G.t; cm = { x: 16 + Math.sin(t * 0.1) * 4, y: 9, a: t * 0.12 }; lensOn = false; interactive = false;
   }
   renderFrame(cm, lensOn, G.state === 'playing' ? G.wt : (interactive ? G.wt : G.t), wt, interactive);
@@ -1094,7 +1095,7 @@ const el = {
   hud: $('hud'), timer: $('timer'), gc: $('gcounters'), prompt: $('prompt'), toast: $('toast'), clickHint: $('clickHint'),
   lens: $('btnLens'), lensImg: $('lensImg'), crosshair: $('crosshair'), lensFx: $('lensFx'), flash: $('flashFx')
 };
-const SCREENS = ['menu', 'options', 'language', 'pause', 'cutscene', 'spellPanel', 'book', 'win', 'lose', 'bye'];
+const SCREENS = ['menu', 'options', 'language', 'pause', 'cutscene', 'spellPanel', 'book', 'ending', 'win', 'lose', 'bye'];
 function showScreen(id) { SCREENS.forEach((s) => $(s).classList.toggle('hidden', s !== id)); }
 function hideScreens() { SCREENS.forEach((s) => $(s).classList.add('hidden')); }
 let toastTimer = 0;
@@ -1162,6 +1163,7 @@ function setLang(l) {
   if (G.state === 'book') renderBook();
   if (G.state === 'spellPanel' || !$('spellPanel').classList.contains('hidden')) fillSpellPanel(G.panelSpell);
   if (G.state === 'cutscene') { csText(); }
+  if (G.state === 'ending') fillEnding();
   if (G.state === 'win') fillWin();
   if (G.state === 'lose') fillLose();
 }
@@ -1192,8 +1194,9 @@ function restartGame() { AU.init(); startNewRun(); hideScreens(); el.hud.classLi
 function toMenu() { releasePointer(); G.state = 'menu'; el.hud.classList.add('hidden'); G.lens = false; hudLens(); showScreen('menu'); G.t = 0; }
 function openPause() { if (G.state !== 'playing') return; G.state = 'pause'; releasePointer(); sfx('ui'); showScreen('pause'); }
 function resumeGame() { if (G.state !== 'pause') return; hideScreens(); G.state = 'playing'; lockPointer(); }
-function winGame() {
-  G.state = 'win'; releasePointer(); G.t = 0; el.hud.classList.add('hidden'); el.lensFx.classList.remove('on'); sfx('win'); fillWin(); showScreen('win');
+function winGame() { startEnding(); }          // all ghosts captured -> lesson first
+function showWin() {
+  G.state = 'win'; releasePointer(); G.t = 0; el.hud.classList.add('hidden'); el.lensFx.classList.remove('on'); fillWin(); showScreen('win');
 }
 function fillWin() {
   const tot = G.req.reduce((a, b) => a + b, 0);
@@ -1413,6 +1416,11 @@ window.addEventListener('keydown', (e) => {
       break;
     case 'spellPanel':
       if (c === 'Enter' || c === 'Space' || c === 'Escape' || c === 'KeyF') closeSpellPanel(); break;
+    case 'ending':
+      if (c === 'Enter' || c === 'NumpadEnter' || c === 'Space' || c === 'ArrowRight') { sfx('ui'); enGo(1); }
+      else if (c === 'ArrowLeft') { sfx('ui'); enGo(-1); }
+      else if (c === 'Escape') finishEnding();
+      break;
     case 'pause':
       if (c === 'Escape') { if (!$('options').classList.contains('hidden') || !$('language').classList.contains('hidden')) showScreen('pause'); else resumeGame(); } break;
     case 'menu':
@@ -1423,6 +1431,144 @@ window.addEventListener('keyup', (e) => { keys[e.code] = false; });
 window.addEventListener('blur', () => { for (const k in keys) keys[k] = false; if (G.state === 'playing') openPause(); });
 document.addEventListener('visibilitychange', () => { if (document.hidden && G.state === 'playing') openPause(); });
 window.addEventListener('contextmenu', (e) => e.preventDefault());
+
+/* ---- ENDING: the lesson (one filter at a time) ---- */
+Object.assign(L.en, {
+  enTag: 'THE LESSON', enBefore: 'BEFORE', enAfter: 'AFTER', enSkip: 'SKIP', enNextBtn: 'NEXT', enFinish: 'FINISH',
+  enIntroTitle: 'WHAT IS A CONVOLUTION?', enIntro1L: 'THE IDEA', enIntro2L: 'YOUR FIVE SPELLS',
+  enIntro1: 'A convolution slides a small grid of numbers, the kernel, over every pixel of an image. At each pixel, the neighbors are multiplied by the kernel weights and added up. The sum becomes the new pixel.',
+  enIntro2: 'Every spell you collected is a different kernel with a different effect. Let us see what each one did to its ghost.',
+  enL1: 'WHAT THE FILTER DOES', enL2: 'WHAT IT DID TO THE GHOST',
+  enPasses: 'Applied 3 times so the effect is visible'
+});
+Object.assign(L.ar, {
+  enTag: 'الدرس', enBefore: 'قبل', enAfter: 'بعد', enSkip: 'تخطي', enNextBtn: 'التالي', enFinish: 'إنهاء',
+  enIntroTitle: 'ما هو الالتفاف؟', enIntro1L: 'الفكرة', enIntro2L: 'تعاويذك الخمس',
+  enIntro1: 'الالتفاف هو تمرير شبكة صغيرة من الأعداد، تُسمّى النواة، فوق كل بكسل في الصورة. عند كل بكسل تُضرب البكسلات المجاورة في أوزان النواة ثم تُجمع النتائج، ويصبح المجموع قيمة البكسل الجديد.',
+  enIntro2: 'كل تعويذة جمعتها هي نواة مختلفة ولها تأثير مختلف. لنرَ ماذا فعلت كل تعويذة بشبحها.',
+  enL1: 'ماذا يفعل المرشح', enL2: 'ماذا فعل بالشبح',
+  enPasses: 'طُبّقت 3 مرات ليظهر الأثر'
+});
+const LESSON = [
+  { does: { en: 'Every pixel becomes a weighted average of its neighbors, and the center counts the most. The weights add up to 16, so we divide by 16 to keep the brightness.',
+            ar: 'يصبح كل بكسل متوسطًا مرجّحًا لجيرانه، ويحظى المركز بأكبر وزن. مجموع الأوزان 16، لذلك نقسم على 16 للحفاظ على السطوع.' },
+    effect: { en: 'The Wandering Wraith melts into a soft, hazy glow. Sharp edges and fine details disappear.',
+              ar: 'يذوب الشبح الهائم ويتحول إلى توهج ناعم ضبابي، وتختفي الحواف الحادة والتفاصيل الدقيقة.' } },
+  { does: { en: 'The center is boosted (5) and the four direct neighbors are subtracted (-1 each). Wherever a pixel differs from its neighbors, that difference is exaggerated.',
+            ar: 'يُضخَّم المركز (5) وتُطرح البكسلات الأربعة المجاورة (-1 لكل منها). فكلما اختلف البكسل عن جيرانه تضخّم هذا الفرق.' },
+    effect: { en: 'The Crimson Reaper becomes crisper: its edges and glowing eyes stand out with more contrast.',
+              ar: 'يصبح الحاصد القرمزي أوضح: تبرز حوافه وعيناه المتوهجتان بتباين أكبر.' } },
+  { does: { en: 'The center (4) minus its four neighbors. In flat areas the sum is 0 (black). Where brightness changes suddenly, the result is large.',
+            ar: 'المركز (4) مطروحًا منه البكسلات الأربعة المجاورة. في المناطق المتجانسة يكون المجموع 0 (أسود)، وعند أي تغيّر مفاجئ في السطوع تكون النتيجة كبيرة.' },
+    effect: { en: 'The Hollow Watcher\'s body vanishes. Only the glowing outline of its shape remains.',
+              ar: 'يختفي جسد المراقب الأجوف ولا يبقى إلا محيط شكله المتوهج.' } },
+  { does: { en: 'The weights are negative on one diagonal and positive on the opposite one, so the result measures brightness change in one direction. A constant is added so flat areas look mid-gray.',
+            ar: 'الأوزان سالبة على قطر وموجبة على القطر المقابل، فتقيس النتيجة تغيّر السطوع في اتجاه واحد. وتُضاف قيمة ثابتة كي تظهر المناطق المتجانسة رمادية.' },
+    effect: { en: 'The Engraved Phantom looks carved out of stone, as if lit from one side.',
+              ar: 'يبدو الشبح المنقوش وكأنه محفور في الحجر ومضاء من جهة واحدة.' } },
+  { does: { en: 'Only one column of weights is non-zero, so each pixel is averaged with its neighbors along a single direction (divided by 3).',
+            ar: 'عمود واحد فقط من الأوزان غير صفري، فيُحسب متوسط كل بكسل مع جيرانه في اتجاه واحد (القسمة على 3).' },
+    effect: { en: 'The Phantom Drifter smears into a streak, as if it were racing past.',
+              ar: 'يتمدد الشبح الجوّال على شكل أثر كأنه يندفع بسرعة.' } }
+];
+const EN = { idx: 0, pos: -40, img: {} };
+const enB = $('enB'), enA = $('enA'), ebx = enB.getContext('2d'), eax = enA.getContext('2d');
+ebx.imageSmoothingEnabled = false; eax.imageSmoothingEnabled = false;
+const EN_BG = 'rgb(14,8,22)';
+
+// builds "before" (true ghost sprite) and "after" (real convolution of it with the spell kernel)
+function lessonImgs(i) {
+  if (EN.img[i]) return EN.img[i];
+  const before = mkCanvas(SPR, SPR), bx = before.getContext('2d');
+  bx.fillStyle = EN_BG; bx.fillRect(0, 0, SPR, SPR); bx.drawImage(ghostCanvas(i, 0, 0, 0), 0, 0);
+  const sp = SPELLS[i], k = sp.kernel, div = sp.norm ? +sp.norm.split('/')[1] : 1;
+  const passes = i === 4 ? 3 : 1, bias = i === 3 ? 100 : 0;
+  let cur = bx.getImageData(0, 0, SPR, SPR).data;
+  for (let p = 0; p < passes; p++) {
+    const out = new Uint8ClampedArray(cur.length), last = p === passes - 1;
+    for (let y = 0; y < SPR; y++) for (let x = 0; x < SPR; x++) {
+      const o = (y * SPR + x) * 4;
+      for (let ch = 0; ch < 3; ch++) {
+        let s = 0;
+        for (let ky = -1; ky <= 1; ky++) for (let kx = -1; kx <= 1; kx++)
+          s += k[(ky + 1) * 3 + kx + 1] * cur[(clamp(y + ky, 0, SPR - 1) * SPR + clamp(x + kx, 0, SPR - 1)) * 4 + ch];
+        s /= div;
+        if (last) { if (i === 2) s = Math.abs(s) * 1.2; s += bias; }
+        out[o + ch] = s;
+      }
+      out[o + 3] = 255;
+    }
+    cur = out;
+  }
+  const after = mkCanvas(SPR, SPR); after.getContext('2d').putImageData(new ImageData(cur, SPR, SPR), 0, 0);
+  return (EN.img[i] = { before, after });
+}
+function startEnding() {
+  G.state = 'ending'; releasePointer(); G.t = 0; el.hud.classList.add('hidden'); el.lensFx.classList.remove('on');
+  EN.idx = 0; EN.pos = -40; sfx('win'); fillEnding(); showScreen('ending');
+}
+function finishEnding() { if (G.state === 'ending') showWin(); }
+function enGo(d) {
+  if (G.state !== 'ending') return;
+  const n = EN.idx + d; if (n < 0) return;
+  if (n > 5) { finishEnding(); return; }
+  EN.idx = n; EN.pos = -40; fillEnding();
+}
+function fillEnding() {
+  const i = EN.idx, lang = G.lang, intro = i === 0, gi = intro ? 0 : i - 1, sp = SPELLS[gi];
+  const col = intro ? '#f0a030' : sp.color;
+  $('enCount').textContent = (i + 1) + ' / 6';
+  $('enPrev').style.visibility = intro ? 'hidden' : 'visible';
+  $('enNext').textContent = tr(i === 5 ? 'enFinish' : 'enNextBtn');
+  $('enTag').textContent = tr('enTag');
+  enB.style.setProperty('--c', GHOSTS[gi].color); enA.style.setProperty('--c', col);
+  $('enPanel').style.boxShadow = 'inset 0 0 0 4px ' + col + ',inset 0 0 0 8px #2c1a10,0 0 0 4px ' + col;
+  const g = $('enGhost'); g.textContent = GHOSTS[gi].name[lang]; g.style.color = GHOSTS[gi].color;
+  const t = $('enTitle'), op = $('enOp'), note = $('enMxNote');
+  t.style.color = col; op.style.color = col;
+  if (intro) {
+    t.textContent = tr('enIntroTitle'); op.textContent = '?';
+    $('enMx').innerHTML = '<div class="mx" style="--c:' + col + '">' + ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'].map((v) => '<div>' + v + '</div>').join('') + '</div>';
+    note.textContent = '';
+    $('enL1').textContent = tr('enIntro1L'); $('enT1').textContent = tr('enIntro1');
+    $('enL2').textContent = tr('enIntro2L'); $('enT2').textContent = tr('enIntro2');
+  } else {
+    t.textContent = sp.name[lang]; op.textContent = sp.op[lang];
+    $('enMx').innerHTML = matrixHTML(sp, false);
+    note.textContent = (sp.norm ? tr('normLbl') + ': ' + sp.norm : '') + (gi === 4 ? '\n' + tr('enPasses') : '');
+    note.style.whiteSpace = 'pre-line';
+    $('enL1').textContent = tr('enL1'); $('enT1').textContent = LESSON[gi].does[lang];
+    $('enL2').textContent = tr('enL2'); $('enT2').textContent = LESSON[gi].effect[lang];
+  }
+}
+function updateEnding(dt) {
+  const i = EN.idx, gi = i === 0 ? 0 : i - 1, col = i === 0 ? '#f0a030' : SPELLS[gi].color;
+  EN.pos += dt * (i === 0 ? 260 : 300);
+  if (i === 0 && EN.pos >= 1100) EN.pos = -40;       // intro loops the scan
+  const im = lessonImgs(gi), done = EN.pos >= 1024, scanning = EN.pos >= 0 && !done;
+  const pos = clamp(EN.pos | 0, 0, 1023), x = pos % SPR, y = (pos / SPR) | 0;
+  // before: true ghost + sliding 3x3 kernel window
+  ebx.clearRect(0, 0, 96, 96); ebx.drawImage(im.before, 0, 0, 96, 96);
+  if (scanning) {
+    const l = (x - 1) * 3, tp = (y - 1) * 3; ebx.fillStyle = col;
+    ebx.fillRect(l, tp, 9, 2); ebx.fillRect(l, tp + 7, 9, 2); ebx.fillRect(l, tp, 2, 9); ebx.fillRect(l + 7, tp, 2, 9);
+  }
+  // after: result revealed as the window moves
+  eax.fillStyle = EN_BG; eax.fillRect(0, 0, 96, 96);
+  if (i === 0) {
+    eax.globalAlpha = 0.55 + 0.45 * Math.sin(G.t * 4); eax.fillStyle = col;
+    eax.font = '44px "Press Start 2P", monospace'; eax.textAlign = 'center'; eax.fillText('?', 48, 64); eax.globalAlpha = 1;
+  } else if (done) {
+    eax.drawImage(im.after, 0, 0, 96, 96);
+  } else if (scanning) {
+    if (y > 0) eax.drawImage(im.after, 0, 0, SPR, y, 0, 0, 96, y * 3);
+    eax.drawImage(im.after, 0, y, x + 1, 1, 0, y * 3, (x + 1) * 3, 3);
+    eax.fillStyle = col; eax.fillRect(x * 3, y * 3, 3, 1); eax.fillRect(x * 3, y * 3 + 2, 3, 1);
+  }
+}
+bind('enNext', () => enGo(1));
+bind('enPrev', () => enGo(-1));
+bind('enSkip', finishEnding);
 
 const stage = $('stage');
 function fit() {
@@ -1439,6 +1585,7 @@ function frame(now) {
   else {
     update(dt);
     if (G.shotT > 0) G.shotT -= dt;
+    if (G.state === 'ending') updateEnding(dt);
     render();
     if (G.state === 'playing') el.clickHint.textContent = document.pointerLockElement === view ? '' : tr('clickHint');
     else el.clickHint.textContent = '';
