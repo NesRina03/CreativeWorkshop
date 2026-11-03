@@ -1,17 +1,17 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+body {
     background: #1a1a2e;
-    overflow: hidden;    
+    overflow: hidden;
     font-family: 'Courier New', monospace;
-    color:#eee;
+    color: #eee;
 }
 
-#gameContainer{
+#gameContainer {
     display: flex;
     height: 100vh;
     position: relative;
@@ -19,10 +19,9 @@ body{
     align-items: center;
 }
 
-#gameCanvas{
-    border: 4px solid #0f3460;
+#gameCanvas {
+    border: 4px solid #2e2e3e;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
-    background: #162447;
+    background: #1a1a2e;
 }
-
