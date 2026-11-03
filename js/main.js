@@ -54,7 +54,9 @@ window.addEventListener('keydown', (e) => {
     case 'book':
       if (c === 'KeyB' || c === 'Escape') closeBook();
       else if (c === 'Enter' || c === 'NumpadEnter') castSpell();
-      else if (/^Digit[1-5]$/.test(c)) { G.sel = +c.slice(5) - 1; $('bkMsg').textContent = ''; renderBook(); sfx('ui'); }
+      else if (c === 'ArrowUp') selectBookSpell((G.sel + SPELLS.length - 1) % SPELLS.length);
+      else if (c === 'ArrowDown') selectBookSpell((G.sel + 1) % SPELLS.length);
+      else if (/^Digit[1-5]$/.test(c)) selectBookSpell(+c.slice(5) - 1);
       break;
     case 'spellPanel':
       if (c === 'Enter' || c === 'Space' || c === 'Escape' || c === 'KeyF') closeSpellPanel(); break;
