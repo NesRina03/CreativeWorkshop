@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,12 @@
 </head>
 <body>
     <div id="gameContainer">
+        <nav id="gameToolbar" aria-label="Game settings">
+            <button id="languageButton" type="button" aria-label="Switch language">العربية</button>
+            <button id="soundButton" type="button" aria-pressed="false">Sound: Off</button>
+            <button id="musicButton" type="button" aria-pressed="false">Music: Off</button>
+            <span id="audioStatus" class="visually-hidden" role="status" aria-live="polite"></span>
+        </nav>
         <canvas id="gameCanvas"></canvas>
     </div>
     

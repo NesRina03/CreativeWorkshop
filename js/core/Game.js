@@ -2,6 +2,8 @@ import { GAME_WIDTH, GAME_HEIGHT} from "./constants.js";
 import { RenderSystem } from "../systems/RenderSystem.js";
 import { Player } from "../entities/Player.js";
 import { ImageManager } from "../managers/ImageManager.js";
+import { AudioManager } from "../managers/AudioManager.js";
+import { Localization } from "../managers/Localization.js";
 
 export class Game {
     constructor(){
@@ -13,8 +15,11 @@ export class Game {
 
         this.renderSystem = new RenderSystem(this.canvas, this.imageManager);
         this.player = new Player();
+        this.audioManager = new AudioManager();
+        this.localization = new Localization(this.audioManager);
         this.keys = {};
         this.lastTime;
+        this.movementSoundTimer = 0;
  
         this.init();
     }
@@ -22,6 +27,7 @@ export class Game {
         this.resizeCanvas();
         window.addEventListener('resize', () => this.resizeCanvas());
         this.setupInput();
+        this.setupInterface();
 
         // start game loop
         this.lastTime = performance.now();
@@ -36,14 +42,27 @@ export class Game {
         requestAnimationFrame((t) => this.gameLoop(t));
     }
     update(dt){
+        const previousX = this.player.x;
+        const previousY = this.player.y;
         this.player.update(dt, this.keys);
+        this.movementSoundTimer = Math.max(0, this.movementSoundTimer - dt);
+
+        if ((this.player.x !== previousX || this.player.y !== previousY) && this.movementSoundTimer === 0){
+            this.audioManager.playMovementSound();
+            this.movementSoundTimer = 0.32;
+        }
     }
     setupInput(){
         window.addEventListener('keydown', (e) => {
-            this.keys[e.key.toLowerCase()] = true;
+            const key = e.code.startsWith('Key') ? e.code.slice(3).toLowerCase() : e.key.toLowerCase();
+            if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)){
+                e.preventDefault();
+                this.keys[key] = true;
+            }
         });
         window.addEventListener('keyup', (e) => {
-            this.keys[e.key.toLowerCase()] = false;
+            const key = e.code.startsWith('Key') ? e.code.slice(3).toLowerCase() : e.key.toLowerCase();
+            this.keys[key] = false;
         });
         // Clear all keys when context menu opens
         window.addEventListener('contextmenu', () => {
@@ -52,6 +71,46 @@ export class Game {
         // Clear all keys when window loses focus
         window.addEventListener('blur', () => {
             this.keys = {};
+        });
+    }
+    setupInterface(){
+        const languageButton = document.getElementById('languageButton');
+        const soundButton = document.getElementById('soundButton');
+        const musicButton = document.getElementById('musicButton');
+        const audioStatus = document.getElementById('audioStatus');
+
+        this.localization.setLanguage(this.localization.language);
+        languageButton.addEventListener('click', () => {
+            const language = this.localization.language === 'en' ? 'ar' : 'en';
+            this.localization.setLanguage(language);
+        });
+
+        soundButton.addEventListener('click', async () => {
+            soundButton.disabled = true;
+            audioStatus.textContent = '';
+            try {
+                await this.audioManager.toggleSound();
+                this.localization.updateControls();
+            } catch (error){
+                audioStatus.textContent = this.localization.text.audioError;
+                console.error('Unable to enable sound effects:', error);
+            } finally {
+                soundButton.disabled = false;
+            }
+        });
+
+        musicButton.addEventListener('click', async () => {
+            musicButton.disabled = true;
+            audioStatus.textContent = '';
+            try {
+                await this.audioManager.toggleMusic();
+                this.localization.updateControls();
+            } catch (error){
+                audioStatus.textContent = this.localization.text.audioError;
+                console.error('Unable to toggle music:', error);
+            } finally {
+                musicButton.disabled = false;
+            }
         });
     }
     resizeCanvas(){
