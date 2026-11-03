@@ -126,17 +126,21 @@ function drawParticles() {
     }
   }
 }
-/* sliding 3x3 window: pixels already scanned show the TRUE ghost, the rest still show the distorted one */
+/* sliding 3x3 window over the REAL convolution frames: scanned pixels show the next frame, the rest the previous one */
 const SCAN_BUF = new Uint32Array(SPR * SPR);
 function scanSpr(g, fr, eye) {
-  const tru = ghostSpr(g.type, 0, fr, eye), dis = ghostSpr(g.type, 1, fr, 0), N = SPR * SPR;
-  const pos = clamp(((g.rt / REVEAL_T) * N) | 0, 0, N - 1);
-  for (let i = 0; i < N; i++) SCAN_BUF[i] = i < pos ? tru[i] : dis[i];
-  const c = SPELLS[g.type].rgb, col = 0xFF000000 | (c[2] << 16) | (c[1] << 8) | c[0];
-  const wx = pos % SPR, wy = (pos / SPR) | 0;
-  for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
-    const x = wx + dx, y = wy + dy; if (x < 0 || y < 0 || x >= SPR || y >= SPR) continue;
-    SCAN_BUF[y * SPR + x] = (dx === 0 && dy === 0) ? 0xFFFFFFFF : col;
+  const N = SPR * SPR, F = revFrames(g.type, fr, eye), wrong = g.state === 'wrongcast';
+  let A, B, k;
+  if (wrong) { A = F.s[0]; B = wrongSpr(g.type, g.wj, fr, eye); k = g.rt / WRONG_SCAN; }
+  else { const n = F.s.length - 1, kk = clamp(g.rt / REVEAL_T, 0, 0.9999) * n, p = kk | 0; A = F.s[p]; B = F.s[p + 1]; k = kk - p; }
+  const done = k >= 1, pos = done ? N : clamp((k * N) | 0, 0, N - 1);
+  for (let i = 0; i < N; i++) SCAN_BUF[i] = i < pos ? B[i] : A[i];
+  if (!done) {
+    const c = SPELLS[wrong ? g.wj : g.type].rgb, col = 0xFF000000 | (c[2] << 16) | (c[1] << 8) | c[0], wx = pos % SPR, wy = (pos / SPR) | 0;
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+      const x = wx + dx, y = wy + dy; if (x < 0 || y < 0 || x >= SPR || y >= SPR) continue;
+      SCAN_BUF[y * SPR + x] = (dx === 0 && dy === 0) ? 0xFFFFFFFF : col;
+    }
   }
   return SCAN_BUF;
 }
@@ -163,10 +167,10 @@ function renderFrame(cm, lensOn, time, wtime, interactive) {
       drawSprite(RUNE[s.id], 16, s.x, s.y, 0.36, 0.3 + Math.sin(time * 2.4 + s.ph) * 0.05, { alpha: 0.95 });
     } else {
       const g = it.o, gp = GPAR[g.type], fr = ((time * 6 + g.ph * 2) | 0) & 3;
-      const form = g.state === 'hidden' ? 1 : 0;
+      const form = g.state === 'hidden' ? 1 : 2;   // 1 = hidden image, 2 = revealed (real convolution result)
       let eye = 0;
-      if (g.type === 2 && form === 0) { const rx = g.x - cam.x, ry = g.y - cam.y, ty = cam.dx * rx + cam.dy * ry; if (ty > 0.1) eye = clamp(Math.round(-(-cam.dy * rx + cam.dx * ry) / ty * 2.2), -1, 1); }
-      const spr = g.state === 'revealing' ? scanSpr(g, fr, eye) : ghostSpr(g.type, form, fr, eye);
+      if (g.type === 2 && form === 2) { const rx = g.x - cam.x, ry = g.y - cam.y, ty = cam.dx * rx + cam.dy * ry; if (ty > 0.1) eye = clamp(Math.round(-(-cam.dy * rx + cam.dx * ry) / ty * 2.2), -1, 1); }
+      const spr = (g.state === 'revealing' || g.state === 'wrongcast') ? scanSpr(g, fr, eye) : ghostSpr(g.type, form, fr, eye);
       const o = { alpha: clamp((LENS_RANGE - it.d) / 2.5, 0, 1) * ((g.state === 'revealed' || g.state === 'revealing') ? 0.96 : 0.82) };
       let sc = gp.scale, ex = 0;
       if (g.state === 'capturing') {
@@ -187,7 +191,7 @@ function renderFrame(cm, lensOn, time, wtime, interactive) {
   if (interactive && lensOn) {
     let best = null;
     for (const g of G.ghosts) {
-      const r = g.sr; if (!r || g.state === 'capturing' || g.state === 'revealing') continue;
+      const r = g.sr; if (!r || g.state === 'capturing' || g.state === 'revealing' || g.state === 'wrongcast') continue;
       const cxp = r.left + r.size * GPAR[g.type].cx;
       if (Math.abs(W / 2 - cxp) > r.size * GPAR[g.type].hw) continue;
       if (HALF < r.top + r.size * 0.06 || HALF > r.top + r.size * 0.97) continue;

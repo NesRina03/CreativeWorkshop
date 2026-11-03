@@ -4,6 +4,7 @@ const W = 320, H = 200, HALF = H / 2, SPR = 32;
 const FOV = 0.66, LENS_RANGE = 9, USE_RANGE = 1.3, SENS = 0.0023;
 const MW = 32, MH = 24, LMR = 4, LMW = MW * LMR, LMH = MH * LMR;
 const TAU = Math.PI * 2;
+const WRONG_SCAN = 0.55, WRONG_T = 1.0; // wrong cast: scan time / total time the wrong result stays visible
 const REVEAL_T = 1.0; // seconds the sliding window takes to reveal a ghost
 const $ = (id) => document.getElementById(id);
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);

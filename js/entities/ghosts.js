@@ -5,33 +5,33 @@ const SPELLS = [
   { color: '#3d8bff', rgb: [61, 139, 255], kernel: [1, 2, 1, 2, 4, 2, 1, 2, 1], norm: '1/16',
     name: { en: 'THE GAUSSIAN VEIL', ar: 'حجاب غاوس' }, op: { en: 'Gaussian Blur', ar: 'تمويه غاوسي' },
     colorName: { en: 'BLUE', ar: 'أزرق' },
-    fn: { en: 'Makes things soft and fuzzy, like looking through foggy glass.', ar: 'يجعل الأشياء ناعمة وضبابية، كأنك تنظر من خلف زجاج مغبّش.' },
-    desc: { en: 'Imagine breathing on a window and seeing everything go soft and misty. This spell blurs tiny details until the picture looks smooth and dreamy. Choose it for a ghost that looks fuzzy and foggy.',
-            ar: 'تخيّل أنك تنفخ على النافذة فتبدو الأشياء ناعمة وضبابية. تُذيب هذه التعويذة التفاصيل الصغيرة حتى تبدو الصورة هادئة ومموّهة. اخترها للشبح الذي يبدو مشوّشًا وضبابيًا.' } },
+    fn: { en: 'Smooths away fuzzy speckles, like cleaning a snowy TV screen.', ar: 'يزيل البقع المشوّشة، كأنك تنظّف شاشة تلفاز مليئة بالثلج.' },
+    desc: { en: 'This spell blends every dot with the dots next to it, so random speckles melt away and the picture becomes smooth and clean, like wiping a snowy TV screen. Choose it for a ghost buried in fuzzy TV static.',
+            ar: 'تمزج هذه التعويذة كل نقطة مع النقاط المجاورة لها، فتذوب البقع العشوائية وتصبح الصورة ناعمة ونظيفة، كمسح شاشة تلفاز مليئة بالثلج. اخترها للشبح المدفون في ضجيج التلفاز.' } },
   { color: '#ff3b3b', rgb: [255, 59, 59], kernel: [0, -1, 0, -1, 5, -1, 0, -1, 0], norm: null,
     name: { en: 'THE SHARPENING RUNE', ar: 'رونية الشحذ' }, op: { en: 'Sharpening', ar: 'تحسين الحدة' },
     colorName: { en: 'RED', ar: 'أحمر' },
-    fn: { en: 'Makes edges bold and crisp, like tracing a drawing with a marker.', ar: 'يجعل الحواف واضحة وحادة، كأنك ترسم فوق الرسم بقلم عريض.' },
-    desc: { en: 'Like going over a pencil drawing with a thick marker, this spell makes every edge bold and clear. Little details pop out and look extra sharp. Choose it for a ghost that looks rough, jagged and sparkly.',
-            ar: 'كأنك تمرّ بقلم عريض فوق رسم بالرصاص، تجعل هذه التعويذة كل حافة واضحة وقوية. تبرز التفاصيل الصغيرة وتبدو حادة. اخترها للشبح الذي يبدو خشنًا ومسنّنًا ولامعًا.' } },
+    fn: { en: 'Makes blurry things crisp and clear again, like putting on glasses.', ar: 'يعيد الأشياء الضبابية واضحة وحادة، كأنك ارتديت نظارة.' },
+    desc: { en: 'Like putting on glasses when everything looks blurry, this spell makes soft, smudgy edges bold and clear again. Choose it for a ghost that looks like a soft, blurry smear.',
+            ar: 'كأنك ارتديت نظارة بعد أن كان كل شيء ضبابيًا، تجعل هذه التعويذة الحواف الباهتة قوية وواضحة من جديد. اخترها للشبح الذي يبدو كبقعة ناعمة ومشوّشة.' } },
   { color: '#22e06a', rgb: [34, 224, 106], kernel: [0, -1, 0, -1, 4, -1, 0, -1, 0], norm: null,
     name: { en: 'THE EDGE SEEKER', ar: 'باحث الحواف' }, op: { en: 'Laplacian Edge Detection', ar: 'كشف الحواف اللابلاسي' },
     colorName: { en: 'GREEN', ar: 'أخضر' },
-    fn: { en: 'Keeps only the outlines, like a coloring-book page.', ar: 'يُبقي الخطوط الخارجية فقط، مثل صفحة تلوين.' },
-    desc: { en: 'This spell erases the colors and keeps only the outlines, like a coloring-book page waiting for crayons. Flat areas turn black and only the borders glow. Choose it for a ghost that looks like glowing lines and dots.',
-            ar: 'تمحو هذه التعويذة الألوان وتُبقي الخطوط الخارجية فقط، مثل صفحة تلوين تنتظر الألوان. تصبح المساحات الممتلئة سوداء وتتوهج الحدود فقط. اخترها للشبح الذي يبدو كخطوط ونقاط متوهجة.' } },
+    fn: { en: 'Shows only the outlines of hidden shapes, like a coloring-book page.', ar: 'يُظهر الخطوط الخارجية للأشكال المختبئة فقط، مثل صفحة تلوين.' },
+    desc: { en: 'This spell ignores the flat colors and lights up only the outlines, like a coloring-book page, so a shape hiding in the fog shows its borders. Choose it for a ghost that is a dim, smooth shape blending into the fog.',
+            ar: 'تتجاهل هذه التعويذة الألوان الممتلئة وتُضيء الخطوط الخارجية فقط، مثل صفحة تلوين، فيظهر الشكل المختبئ في الضباب بحدوده. اخترها للشبح الذي يبدو كشكل خافت وناعم يذوب في الضباب.' } },
   { color: '#b45cff', rgb: [180, 92, 255], kernel: [-2, -1, 0, -1, 1, 1, 0, 1, 2], norm: null,
     name: { en: 'THE EMBOSS CURSE', ar: 'لعنة النقش البارز' }, op: { en: 'Embossing', ar: 'النقش البارز' },
     colorName: { en: 'PURPLE', ar: 'بنفسجي' },
-    fn: { en: 'Makes a picture look carved into stone, with bumps and shadows.', ar: 'يجعل الصورة تبدو محفورة في الحجر، بنتوءات وظلال.' },
-    desc: { en: 'Like pressing a coin into clay, this spell makes the picture look carved into stone, with raised bumps and little shadows. Choose it for a ghost that looks gray and stony, as if it was engraved.',
-            ar: 'كأنك تضغط عملة على الطين، تجعل هذه التعويذة الصورة تبدو منحوتة في الحجر بنتوءات وظلال صغيرة. اخترها للشبح الذي يبدو رماديًا وحجريًا كأنه محفور.' } },
-  { color: '#ffd92e', rgb: [255, 217, 46], kernel: [1, 0, 0, 1, 0, 0, 1, 0, 0], norm: '1/3',
+    fn: { en: 'Makes faint marks pop out like carvings in stone.', ar: 'يُبرز العلامات الباهتة كأنها نقوش في الحجر.' },
+    desc: { en: 'Like pressing a coin into clay, this spell turns tiny, nearly invisible differences into bumps and shadows, so hidden carvings pop out of the stone. Choose it for a ghost that looks like a flat, blank slab of stone.',
+            ar: 'كأنك تضغط عملة على الطين، تحوّل هذه التعويذة الفروق الصغيرة شبه الخفية إلى نتوءات وظلال، فتبرز النقوش المخفية من الحجر. اخترها للشبح الذي يبدو كلوح حجري مسطّح وفارغ.' } },
+  { color: '#ffd92e', rgb: [255, 217, 46], kernel: [0, 0, 0, 1, 1, 1, 0, 0, 0], norm: '1/3',
     name: { en: 'THE PHANTOM TRAIL', ar: 'أثر الشبح' }, op: { en: 'Motion Blur', ar: 'تمويه الحركة' },
     colorName: { en: 'YELLOW', ar: 'أصفر' },
-    fn: { en: 'Smears things into a streak, as if they zoom past very fast.', ar: 'يمدّ الأشياء على شكل أثر كأنها تمرّ بسرعة كبيرة.' },
-    desc: { en: 'Like a photo of a speeding race car, this spell stretches the picture into a streak so it looks like it is zooming by. Choose it for a ghost that leaves a long trail behind it.',
-            ar: 'مثل صورة لسيارة سباق مسرعة، تمدّ هذه التعويذة الصورة على شكل أثر فتبدو وكأنها تندفع. اخترها للشبح الذي يترك خلفه أثرًا طويلًا.' } }
+    fn: { en: 'Fills in the gaps and smears things into one smooth streak.', ar: 'يملأ الفراغات ويمدّ الأشياء في أثر واحد متصل.' },
+    desc: { en: 'Like a long-exposure photo of a speeding car, this spell smears each dot sideways and fills in the gaps, so broken pieces join into one smooth streak. Choose it for a ghost chopped into thin stripes with gaps.',
+            ar: 'مثل صورة طويلة التعريض لسيارة مسرعة، تمدّ هذه التعويذة كل نقطة إلى الجانب وتملأ الفراغات، فتلتحم القطع المتفرقة في أثر واحد متصل. اخترها للشبح المقطّع إلى شرائح رفيعة بينها فراغات.' } }
 ];
 // ghost type i is bound to spell i (consistent for the whole game)
 const GHOSTS = [
@@ -137,107 +137,136 @@ function dDrifter(c, f) {
 }
 const GDRAW = [dWraith, dReaper, dWatcher, dEngraved, dDrifter];
 
-/* ---- distortions: the "lens view" of each ghost, built from the true sprite ---- */
-function conv3(src, k, div) {
-  const o = new Uint8ClampedArray(src.length);
-  for (let y = 0; y < SPR; y++) for (let x = 0; x < SPR; x++) {
-    let A = 0, R = 0, G = 0, B = 0;
-    for (let ky = -1; ky <= 1; ky++) for (let kx = -1; kx <= 1; kx++) {
-      const xx = x + kx, yy = y + ky; if (xx < 0 || yy < 0 || xx >= SPR || yy >= SPR) continue;
-      const w = k[(ky + 1) * 3 + kx + 1], i = (yy * SPR + xx) * 4, a = src[i + 3] * w;
-      A += a; R += a * src[i]; G += a * src[i + 1]; B += a * src[i + 2];
+/* ---- REAL convolution pipeline ----
+   Each ghost has a hidden image H (its true sprite + a "problem") and exactly one spell whose kernel genuinely solves it.
+   Frames are computed with true 3x3 convolutions and cached:  [H, K*H, K*K*H, ...]  (PASSES[type] applications).
+   form 0 = clean sprite, form 1 = hidden (H), form 2 = revealed (last frame).
+   Wrong casts are real too: applySpell(j, H) for any spell j on any ghost. */
+const KERN = SPELLS.map((sp) => ({ k: sp.kernel, div: sp.norm ? +sp.norm.split('/')[1] : 1 }));
+const PASSES = [3, 2, 1, 1, 1];
+
+// true 2-D convolution of one float plane (kernel flipped, edges replicated)
+function conv(p, w, h, k, div) {
+  const o = new Float32Array(w * h);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    let s = 0;
+    for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) {
+      const xx = Math.min(w - 1, Math.max(0, x - i)), yy = Math.min(h - 1, Math.max(0, y - j));
+      s += k[(j + 1) * 3 + i + 1] * p[yy * w + xx];
     }
-    const oi = (y * SPR + x) * 4; o[oi + 3] = A / div;
-    if (A > 0) { o[oi] = R / A; o[oi + 1] = G / A; o[oi + 2] = B / A; }
+    o[y * w + x] = s / div;
   }
   return o;
 }
-const K_GAUSS = [1, 2, 1, 2, 4, 2, 1, 2, 1];
-function px(o, x, y, r, g, b, a) { x |= 0; y |= 0; if (x < 0 || y < 0 || x >= SPR || y >= SPR) return; const i = (y * SPR + x) * 4; o[i] = r; o[i + 1] = g; o[i + 2] = b; o[i + 3] = a; }
-function dsWraith(d, r) {
-  const o = conv3(conv3(d, K_GAUSS, 16), K_GAUSS, 16);
-  for (let i = 3; i < o.length; i += 4) o[i] = o[i] * 0.72;
-  for (let n = 0; n < 18; n++) { const x = 16 + (r() - 0.5) * 22, y = 15 + (r() - 0.5) * 27; const i = ((y | 0) * SPR + (x | 0)) * 4; if (o[i + 3] < 80) px(o, x, y, 90, 150, 255, 190); }
-  return o;
-}
-function dsReaper(d, r) {
-  const o = new Uint8ClampedArray(d.length);
-  for (let band = 0; band < SPR; band += 3) {
-    const sh = Math.round((r() - 0.5) * 7);
-    for (let y = band; y < Math.min(SPR, band + 3); y++) for (let x = 0; x < SPR; x++) {
-      const xs = x - sh; if (xs < 0 || xs >= SPR) continue;
-      const si = (y * SPR + xs) * 4, di = (y * SPR + x) * 4;
-      o[di] = d[si]; o[di + 1] = d[si + 1]; o[di + 2] = d[si + 2]; o[di + 3] = d[si + 3];
-    }
+// RGBA sprite -> filtered RGBA sprite (premultiplied, so transparent pixels don't bleed)
+function filterRGBA(d, w, h, k, div) {
+  const n = w * h, Pl = [0, 1, 2, 3].map(() => new Float32Array(n));
+  for (let i = 0; i < n; i++) {
+    const a = d[i * 4 + 3] / 255;
+    Pl[0][i] = d[i * 4] * a; Pl[1][i] = d[i * 4 + 1] * a; Pl[2][i] = d[i * 4 + 2] * a; Pl[3][i] = d[i * 4 + 3];
   }
-  for (let n = 0; n < 28; n++) { const x = (r() * 30) | 0, y = (r() * 30) | 0; for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) o[((y + dy) * SPR + x + dx) * 4 + 3] = 0; }
-  for (let n = 0; n < 16; n++) px(o, 4 + r() * 24, 2 + r() * 27, 255, 50, 60, 220);
-  const j1 = (r() * 3) | 0, j2 = (r() * 3) | 0;
-  for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) { px(o, 11 + j1 + dx, 8 + j2 + dy, 255, 60, 70, 255); px(o, 18 - j1 + dx, 10 + j2 + dy, 255, 60, 70, 255); }
+  const Q = Pl.map((p) => conv(p, w, h, k, div)), o = new Uint8ClampedArray(d.length);
+  for (let i = 0; i < n; i++) {
+    const A = Math.max(0, Math.min(255, Q[3][i])); o[i * 4 + 3] = A;
+    if (A > 0) { const sc = 255 / A; o[i * 4] = Q[0][i] * sc; o[i * 4 + 1] = Q[1][i] * sc; o[i * 4 + 2] = Q[2][i] * sc; }
+  }
   return o;
 }
 function lumA(d) { const L = new Float32Array(SPR * SPR); for (let i = 0; i < SPR * SPR; i++) { const a = d[i * 4 + 3]; L[i] = (0.3 * d[i * 4] + 0.59 * d[i * 4 + 1] + 0.11 * d[i * 4 + 2]) * a / 255 + a * 0.08; } return L; }
-function dsWatcher(d, r) {
-  const o = new Uint8ClampedArray(d.length), L = lumA(d);
-  for (let y = 1; y < SPR - 1; y++) for (let x = 1; x < SPR - 1; x++) {
-    const i = y * SPR + x, lap = Math.abs(4 * L[i] - L[i - 1] - L[i + 1] - L[i - SPR] - L[i + SPR]);
-    if (lap > 14 && r() > 0.32) px(o, x, y, 40, 255, 110, 235);
-  }
-  return o;
-}
-function dsEngraved(d, r) {
-  const o = new Uint8ClampedArray(d.length), L = lumA(d), K = [-2, -1, 0, -1, 1, 1, 0, 1, 2], M = [];
-  for (let y = 1; y < SPR - 1; y++) for (let x = 1; x < SPR - 1; x++) {
-    const i = y * SPR + x; if (d[i * 4 + 3] < 20) continue;
-    let e = 0; for (let ky = -1; ky <= 1; ky++) for (let kx = -1; kx <= 1; kx++) e += K[(ky + 1) * 3 + kx + 1] * L[(y + ky) * SPR + x + kx];
-    const t = clamp(110 + e * 0.7, 0, 255) / 255;
-    px(o, x, y, 40 + t * 160, 20 + t * 130, 70 + t * 185, 235); M.push([x, y]);
-  }
-  for (let n = 0; n < 10 && M.length; n++) { const m = M[(r() * M.length) | 0]; px(o, m[0], m[1], 215, 160, 255, 255); }
-  return o;
-}
-function dsDrifter(d, r) {
-  const sm = new Float32Array(SPR * SPR * 4);
-  for (let y = 0; y < SPR; y++) for (let x = 0; x < SPR; x++) {
-    let A = 0, R = 0, G = 0, B = 0;
-    for (let k = 0; k < 9; k++) { const xx = x + k; if (xx >= SPR) break; const i = (y * SPR + xx) * 4, a = d[i + 3]; A += a; R += d[i] * a; G += d[i + 1] * a; B += d[i + 2] * a; }
-    const o = (y * SPR + x) * 4; sm[o + 3] = A / 9; if (A > 0) { sm[o] = R / A; sm[o + 1] = G / A; sm[o + 2] = B / A; }
-  }
-  const o = new Uint8ClampedArray(d.length);
-  [[-14, 0.2], [-9, 0.3], [-4, 0.45], [0, 0.92]].forEach(([ox, al]) => {
-    for (let y = 0; y < SPR; y++) for (let x = 0; x < SPR; x++) {
-      const xs = x - ox; if (xs < 0 || xs >= SPR) continue;
-      const si = (y * SPR + xs) * 4, sa = sm[si + 3] * al / 255; if (sa <= 0) continue;
-      const di = (y * SPR + x) * 4, da = o[di + 3] / 255, oa = sa + da * (1 - sa);
-      const cr = ox < 0 ? 255 : sm[si], cg = ox < 0 ? 226 : sm[si + 1], cb = ox < 0 ? 70 : sm[si + 2];
-      o[di] = (cr * sa + o[di] * da * (1 - sa)) / oa; o[di + 1] = (cg * sa + o[di + 1] * da * (1 - sa)) / oa; o[di + 2] = (cb * sa + o[di + 2] * da * (1 - sa)) / oa;
-      o[di + 3] = oa * 255;
+
+// one application of spell j to a sprite (RGBA bytes). Laplacian / emboss work on luminance, then get a gain / bias.
+function applySpell(j, d) {
+  const K = KERN[j];
+  if (j === 0 || j === 1) return filterRGBA(d, SPR, SPR, K.k, K.div);
+  if (j === 4) { const o = filterRGBA(d, SPR, SPR, K.k, K.div); for (let i = 3; i < o.length; i += 4) o[i] = Math.min(255, o[i] * 3); return o; } // x3 exposure (box kernel is 1/3 as bright)
+  const L = lumA(d), q = conv(L, SPR, SPR, K.k, K.div), o = new Uint8ClampedArray(d.length);
+  for (let i = 0; i < SPR * SPR; i++) {
+    if (j === 2) {                                   // Laplacian: kernel sums to 0, flat areas -> 0, edges glow
+      const a = Math.abs(q[i]) * 4;
+      if (a > 8) { o[i * 4] = 40; o[i * 4 + 1] = 255; o[i * 4 + 2] = 110; o[i * 4 + 3] = Math.min(255, a); }
+    } else {                                         // emboss: directional difference around mid-grey
+      const a = d[i * 4 + 3]; if (!a) continue;
+      const t = clamp(105 + (q[i] - L[i]) * 2.6, 0, 255) / 255;
+      o[i * 4] = 40 + t * 160; o[i * 4 + 1] = 20 + t * 130; o[i * 4 + 2] = 70 + t * 185; o[i * 4 + 3] = a;
     }
-  });
+  }
   return o;
 }
-const DISTORT = [dsWraith, dsReaper, dsWatcher, dsEngraved, dsDrifter];
+
+/* ---- the "problem" each ghost hides behind (fixed random seed, so every run looks the same) ---- */
+function degWraith(d, r) {            // buried in TV static (zero-mean noise) -> Gaussian averaging cancels it
+  const n = SPR * SPR, o = new Uint8ClampedArray(d.length), zone = new Uint8Array(n);
+  for (let y = 0; y < SPR; y++) for (let x = 0; x < SPR; x++) if (d[(y * SPR + x) * 4 + 3] > 20)
+    for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) {
+      const xx = x + dx, yy = y + dy; if (xx >= 0 && yy >= 0 && xx < SPR && yy < SPR && dx * dx + dy * dy <= 10) zone[yy * SPR + xx] = 1;
+    }
+  for (let i = 0; i < n; i++) {
+    if (!zone[i]) continue;
+    const a = d[i * 4 + 3];
+    if (a > 20) { const nz = (r() - 0.5) * 170; o[i * 4] = d[i * 4] + nz; o[i * 4 + 1] = d[i * 4 + 1] + nz; o[i * 4 + 2] = d[i * 4 + 2] + nz; o[i * 4 + 3] = a + (r() - 0.5) * 150; }
+    else if (r() < 0.5) { const v = 110 + r() * 145; o[i * 4] = v; o[i * 4 + 1] = v; o[i * 4 + 2] = v + 20; o[i * 4 + 3] = 70 + r() * 150; }
+  }
+  return o;
+}
+function degReaper(d) {                // out of focus (blurred twice) -> sharpening restores the edges
+  let o = d; for (let p = 0; p < 2; p++) o = filterRGBA(o, SPR, SPR, KERN[0].k, KERN[0].div); return o;
+}
+function degWatcher(d) {               // camouflaged: dim, smooth silhouette in the colour of the fog -> Laplacian keeps only the edges
+  const o = new Uint8ClampedArray(d.length), fog = [58, 78, 68];
+  for (let i = 0; i < SPR * SPR; i++) {
+    const a = d[i * 4 + 3]; if (!a) continue;
+    for (let ch = 0; ch < 3; ch++) o[i * 4 + ch] = fog[ch] + (d[i * 4 + ch] - fog[ch]) * 0.2;
+    o[i * 4 + 3] = a * 0.6;
+  }
+  return filterRGBA(o, SPR, SPR, KERN[0].k, KERN[0].div);
+}
+function degEngraved(d) {              // flat slab, the inscription painted in almost the same tone -> emboss turns tiny steps into relief
+  const o = new Uint8ClampedArray(d.length), S = [104, 100, 128];
+  for (let i = 0; i < SPR * SPR; i++) {
+    const a = d[i * 4 + 3]; if (!a) continue;
+    for (let ch = 0; ch < 3; ch++) o[i * 4 + ch] = S[ch] + (d[i * 4 + ch] - S[ch]) * 0.12;
+    o[i * 4 + 3] = a;
+  }
+  return o;
+}
+function degDrifter(d) {               // strobe-lit: only every 3rd column is visible -> a 3-tap horizontal box blur fills the gaps
+  const o = new Uint8ClampedArray(d);
+  for (let y = 0; y < SPR; y++) for (let x = 0; x < SPR; x++) if (x % 3 !== 0) o[(y * SPR + x) * 4 + 3] = 0;
+  return o;
+}
+const DEGRADE = [degWraith, degReaper, degWatcher, degEngraved, degDrifter];
+
+const hidCache = {}, frmCache = {}, wrongCache = {};
+function revFrames(type, f, eye) {      // { d: [RGBA bytes...], s: [Uint32 views...] }  frame 0 = hidden, last = revealed
+  const key = (type * 4 + f) * 3 + (eye + 1);
+  if (frmCache[key]) return frmCache[key];
+  const c = mkCanvas(SPR, SPR), x = c.getContext('2d'); GDRAW[type](x, f, eye);
+  const d = [DEGRADE[type](x.getImageData(0, 0, SPR, SPR).data, rng(type * 977 + f * 131 + eye * 17 + 7))];
+  for (let p = 0; p < PASSES[type]; p++) d.push(applySpell(type, d[d.length - 1]));
+  return (frmCache[key] = { d, s: d.map((a) => new Uint32Array(a.buffer)) });
+}
+function wrongSpr(type, j, f, eye) {    // the real output of spell j applied to ghost `type`'s hidden image
+  const key = ((type * 5 + j) * 4 + f) * 3 + (eye + 1);
+  if (wrongCache[key]) return wrongCache[key];
+  return (wrongCache[key] = new Uint32Array(applySpell(j, revFrames(type, f, eye).d[0]).buffer));
+}
 
 const ghostCanvasCache = {}, ghostSprCache = {};
 function ghostCanvas(type, form, f, eye) {
-  const key = ((type * 2 + form) * 4 + f) * 3 + (eye + 1);
+  const key = ((type * 3 + form) * 4 + f) * 3 + (eye + 1);
   if (ghostCanvasCache[key]) return ghostCanvasCache[key];
   const c = mkCanvas(SPR, SPR), x = c.getContext('2d');
   if (form === 0) GDRAW[type](x, f, eye);
-  else {
-    const t = mkCanvas(SPR, SPR), tx = t.getContext('2d'); GDRAW[type](tx, f, 0);
-    const src = tx.getImageData(0, 0, SPR, SPR);
-    const out = DISTORT[type](src.data, rng(type * 977 + f * 131 + 7));
-    x.putImageData(new ImageData(out, SPR, SPR), 0, 0);
-  }
-  ghostCanvasCache[key] = c; return c;
+  else { const F = revFrames(type, f, eye); x.putImageData(new ImageData(new Uint8ClampedArray(F.d[form === 1 ? 0 : F.d.length - 1]), SPR, SPR), 0, 0); }
+  return (ghostCanvasCache[key] = c);
 }
 function ghostSpr(type, form, f, eye) {
-  const key = ((type * 2 + form) * 4 + f) * 3 + (eye + 1);
+  const key = ((type * 3 + form) * 4 + f) * 3 + (eye + 1);
   if (ghostSprCache[key]) return ghostSprCache[key];
-  const c = ghostCanvas(type, form, f, eye);
-  const s = new Uint32Array(c.getContext('2d').getImageData(0, 0, SPR, SPR).data.buffer.slice(0));
-  ghostSprCache[key] = s; return s;
+  let sp;
+  if (form === 0) sp = new Uint32Array(ghostCanvas(type, 0, f, eye).getContext('2d').getImageData(0, 0, SPR, SPR).data.buffer.slice(0));
+  else { const F = revFrames(type, f, eye); sp = F.s[form === 1 ? 0 : F.s.length - 1]; }
+  return (ghostSprCache[key] = sp);
 }
 
 /* ---- spell runes (16x16) ---- */
@@ -304,6 +333,11 @@ function updateGhost(g, dt) {
     return;
   }
   const p = GPAR[g.type];
+  if (g.state === 'wrongcast') {            // the wrong spell's REAL result is shown for a moment, then the ghost reverts
+    g.rt += dt;
+    if (g.rt >= WRONG_T) { g.rt = 0; g.state = 'hidden'; if (g.wrong >= 2) loseGame('spells'); }
+    return;
+  }
   if (g.state === 'revealing') {            // sliding window is scanning the ghost (frozen in place)
     g.rt += dt;
     if (g.rt >= REVEAL_T) {

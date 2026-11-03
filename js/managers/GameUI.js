@@ -212,9 +212,9 @@ function castSpell() {
     g.state = 'revealing'; g.rt = 0; sfx('scan'); flashFx(SPELLS[G.sel].rgb);
     closeBook(); toast(tr('scanning'), SPELLS[g.type].color);
   } else {
-    g.wrong++; sfx('wrong'); $('bkMsg').textContent = tr('wrong'); toast(tr('wrong'), '#ff4a4a');
-    if (g.wrong >= 2) { hideScreens(); G.bookGhost = null; loseGame('spells'); }
-    else { $('bkMsg').textContent = tr('wrong') + ' ' + (2 - g.wrong) + ' ' + tr('attemptsLeft'); renderBook(); }
+    g.wrong++; sfx('wrong'); sfx('scan'); g.state = 'wrongcast'; g.wj = G.sel; g.rt = 0;
+    toast(tr('wrong') + (g.wrong < 2 ? ' ' + (2 - g.wrong) + ' ' + tr('attemptsLeft') : ''), '#ff4a4a');
+    closeBook();
   }
 }
 
@@ -309,7 +309,7 @@ Object.assign(L.en, {
   enIntro1: 'A convolution slides a small grid of numbers, the kernel, over every pixel of an image. At each pixel, the neighbors are multiplied by the kernel weights and added up. The sum becomes the new pixel.',
   enIntro2: 'Every spell you collected is a different kernel with a different effect. Let us see what each one did to its ghost.',
   enL1: 'WHAT THE FILTER DOES', enL2: 'WHAT IT DID TO THE GHOST',
-  enPasses: 'Applied 3 times so the effect is visible'
+  enPasses: 'Applied {n} times so the effect is visible'
 });
 Object.assign(L.ar, {
   enTag: 'الدرس', enBefore: 'قبل', enAfter: 'بعد', enSkip: 'تخطي', enNextBtn: 'التالي', enFinish: 'إنهاء',
@@ -317,40 +317,40 @@ Object.assign(L.ar, {
   enIntro1: 'الالتفاف هو تمرير شبكة صغيرة من الأعداد، تُسمّى النواة، فوق كل بكسل في الصورة. عند كل بكسل تُضرب البكسلات المجاورة في أوزان النواة ثم تُجمع النتائج، ويصبح المجموع قيمة البكسل الجديد.',
   enIntro2: 'كل تعويذة جمعتها هي نواة مختلفة ولها تأثير مختلف. لنرَ ماذا فعلت كل تعويذة بشبحها.',
   enL1: 'ماذا يفعل المرشح', enL2: 'ماذا فعل بالشبح',
-  enPasses: 'طُبّقت 3 مرات ليظهر الأثر'
+  enPasses: 'طُبّقت {n} مرات ليظهر الأثر'
 });
 const LESSON = [
   { does: { en: 'Every pixel becomes a weighted average of its neighbors, and the center counts the most. The weights add up to 16, so we divide by 16 to keep the brightness.',
             ar: 'يصبح كل بكسل متوسطًا مرجّحًا لجيرانه، ويحظى المركز بأكبر وزن. مجموع الأوزان 16، لذلك نقسم على 16 للحفاظ على السطوع.' },
-    effect: { en: 'Before, the Wandering Wraith looked fuzzy and foggy. The Gaussian Veil matched it and revealed its true shape.',
-              ar: 'قبل التعويذة كان الشبح الهائم يبدو مشوّشًا وضبابيًا. طابقته تعويذة حجاب غاوس وكشفت شكله الحقيقي.' } },
+    effect: { en: 'Before, the Wandering Wraith was buried in TV static. Averaging the neighbors cancels the random speckles and leaves a smooth, clean figure.',
+              ar: 'قبل التعويذة كان الشبح الهائم مدفونًا في ضجيج التلفاز. متوسط الجيران يلغي البقع العشوائية ويترك شكلًا ناعمًا ونظيفًا.' } },
   { does: { en: 'The center is boosted (5) and the four direct neighbors are subtracted (-1 each). Wherever a pixel differs from its neighbors, that difference is exaggerated.',
             ar: 'يُضخَّم المركز (5) وتُطرح البكسلات الأربعة المجاورة (-1 لكل منها). فكلما اختلف البكسل عن جيرانه تضخّم هذا الفرق.' },
-    effect: { en: 'Before, the Crimson Reaper looked rough, jagged and sparkly. The Sharpening Rune matched it and revealed its true shape.',
-              ar: 'قبل التعويذة كان الحاصد القرمزي يبدو خشنًا ومسنّنًا ولامعًا. طابقته رونية الشحذ وكشفت شكله الحقيقي.' } },
+    effect: { en: 'Before, the Crimson Reaper was an out-of-focus red smear. Sharpening boosts the edges and brings back its crisp hood and scythe.',
+              ar: 'قبل التعويذة كان الحاصد القرمزي بقعة حمراء خارج التركيز. يعزّز الشحذ الحواف ويعيد له قلنسوته ومنجله الحادّين.' } },
   { does: { en: 'The center (4) minus its four neighbors. In flat areas the sum is 0 (black). Where brightness changes suddenly, the result is large.',
             ar: 'المركز (4) مطروحًا منه البكسلات الأربعة المجاورة. في المناطق المتجانسة يكون المجموع 0 (أسود)، وعند أي تغيّر مفاجئ في السطوع تكون النتيجة كبيرة.' },
-    effect: { en: 'Before, the Hollow Watcher looked like glowing lines and dots. The Edge Seeker matched it and revealed its true shape.',
-              ar: 'قبل التعويذة كان المراقب الأجوف يبدو كخطوط ونقاط متوهجة. طابقه باحث الحواف وكشف شكله الحقيقي.' } },
+    effect: { en: 'Before, the Hollow Watcher was a smooth shape hiding in the fog. Flat areas turn to zero, so only its glowing outline and eye ring remain.',
+              ar: 'قبل التعويذة كان المراقب الأجوف شكلًا ناعمًا يختبئ في الضباب. تتحول المناطق المتجانسة إلى صفر، فلا يبقى إلا محيطه المتوهج وحلقة عينه.' } },
   { does: { en: 'The weights are negative on one diagonal and positive on the opposite one, so the result measures brightness change in one direction. A constant is added so flat areas look mid-gray.',
             ar: 'الأوزان سالبة على قطر وموجبة على القطر المقابل، فتقيس النتيجة تغيّر السطوع في اتجاه واحد. وتُضاف قيمة ثابتة كي تظهر المناطق المتجانسة رمادية.' },
-    effect: { en: 'Before, the Engraved Phantom looked gray and carved from stone. The Emboss Curse matched it and revealed its true shape.',
-              ar: 'قبل التعويذة كان الشبح المنقوش يبدو رماديًا ومحفورًا في الحجر. طابقته لعنة النقش البارز وكشفت شكله الحقيقي.' } },
-  { does: { en: 'Only one column of weights is non-zero, so each pixel is averaged with its neighbors along a single direction (divided by 3).',
-            ar: 'عمود واحد فقط من الأوزان غير صفري، فيُحسب متوسط كل بكسل مع جيرانه في اتجاه واحد (القسمة على 3).' },
-    effect: { en: 'Before, the Phantom Drifter left a long smeared trail. The Phantom Trail matched it and revealed its true shape.',
-              ar: 'قبل التعويذة كان الشبح الجوّال يترك خلفه أثرًا ممتدًا. طابقه أثر الشبح وكشف شكله الحقيقي.' } }
+    effect: { en: 'Before, the Engraved Phantom was a flat, blank slab. Emboss turns tiny differences into shading, so its carvings stand out as raised relief.',
+              ar: 'قبل التعويذة كان الشبح المنقوش لوحًا مسطحًا فارغًا. يحوّل النقش البارز الفروق الصغيرة إلى ظلال، فتبرز نقوشه كأنها ناتئة.' } },
+  { does: { en: 'Only the middle row of weights is non-zero, so each pixel is averaged with its left and right neighbors (divided by 3). Gaps between the stripes get filled in.',
+            ar: 'الصف الأوسط فقط من الأوزان غير صفري، فيُحسب متوسط كل بكسل مع جاريه على اليسار واليمين (القسمة على 3). فتمتلئ الفراغات بين الشرائح.' },
+    effect: { en: 'Before, the Phantom Drifter was chopped into thin stripes. Motion blur smears them sideways and fills the gaps into one streak.',
+              ar: 'قبل التعويذة كان الشبح الجوّال مقطّعًا إلى شرائح رفيعة. يمدّها تمويه الحركة جانبيًا ويملأ الفراغات في أثر واحد.' } }
 ];
 const EN = { idx: 0, pos: -40, img: {} };
 const enB = $('enB'), enA = $('enA'), ebx = enB.getContext('2d'), eax = enA.getContext('2d');
 ebx.imageSmoothingEnabled = false; eax.imageSmoothingEnabled = false;
 const EN_BG = 'rgb(14,8,22)';
 
-// "before" = the distorted ghost the player saw, "after" = its true form revealed by the right spell
+// "before" = the hidden ghost (sprite + its problem), "after" = the REAL convolution result of its spell
 function lessonImgs(i) {
   if (EN.img[i]) return EN.img[i];
   const mk = (form) => { const c = mkCanvas(SPR, SPR), x = c.getContext('2d'); x.fillStyle = EN_BG; x.fillRect(0, 0, SPR, SPR); x.drawImage(ghostCanvas(i, form, 0, 0), 0, 0); return c; };
-  return (EN.img[i] = { before: mk(1), after: mk(0) });
+  return (EN.img[i] = { before: mk(1), after: mk(2) });
 }
 function startEnding() {
   G.state = 'ending'; releasePointer(); G.t = 0; el.hud.classList.add('hidden'); el.lensFx.classList.remove('on');
@@ -384,7 +384,7 @@ function fillEnding() {
   } else {
     t.textContent = sp.name[lang]; op.textContent = sp.op[lang];
     $('enMx').innerHTML = matrixHTML(sp, false);
-    note.textContent = (sp.norm ? tr('normLbl') + ': ' + sp.norm : '');
+    note.textContent = (sp.norm ? tr('normLbl') + ': ' + sp.norm : '') + (PASSES[gi] > 1 ? '\n' + tr('enPasses').replace('{n}', PASSES[gi]) : '');
     note.style.whiteSpace = 'pre-line';
     $('enL1').textContent = tr('enL1'); $('enT1').textContent = LESSON[gi].does[lang];
     $('enL2').textContent = tr('enL2'); $('enT2').textContent = LESSON[gi].effect[lang];
