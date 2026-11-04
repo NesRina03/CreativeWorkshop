@@ -3,31 +3,31 @@
 /*GAME DATA */
 const SPELLS = [
   { color: '#3d8bff', rgb: [61, 139, 255], kernel: [1, 2, 1, 2, 4, 2, 1, 2, 1], norm: '1/16',
-    name: { en: 'THE GAUSSIAN VEIL', ar: 'حجاب غاوس' }, op: { en: 'Gaussian Blur', ar: 'تمويه غاوسي' },
+    name: { en: 'THE FOG-CLEARING CHARM', ar: 'تعويذة تنحي الضباب' }, op: { en: 'Gaussian Blur', ar: 'تمويه غاوسي' },
     colorName: { en: 'BLUE', ar: 'أزرق' },
     fn: { en: 'Smooths away fuzzy speckles, like cleaning a snowy TV screen.', ar: 'يزيل البقع المشوّشة، كأنك تنظّف شاشة تلفاز مليئة بالثلج.' },
     desc: { en: 'This spell blends every dot with the dots next to it, so random speckles melt away and the picture becomes smooth and clean, like wiping a snowy TV screen. Choose it for a ghost buried in fuzzy TV static.',
             ar: 'تمزج هذه التعويذة كل نقطة مع النقاط المجاورة لها، فتذوب البقع العشوائية وتصبح الصورة ناعمة ونظيفة، كمسح شاشة تلفاز مليئة بالثلج. اخترها للشبح المدفون في ضجيج التلفاز.' } },
   { color: '#ff3b3b', rgb: [255, 59, 59], kernel: [0, -1, 0, -1, 5, -1, 0, -1, 0], norm: null,
-    name: { en: 'THE SHARPENING RUNE', ar: 'رونية الشحذ' }, op: { en: 'Sharpening', ar: 'تحسين الحدة' },
+    name: { en: 'THE SHARP-EYE CHARM', ar: 'ختم الحدة' }, op: { en: 'Sharpening', ar: 'تحسين الحدة' },
     colorName: { en: 'RED', ar: 'أحمر' },
     fn: { en: 'Makes blurry things crisp and clear again, like putting on glasses.', ar: 'يعيد الأشياء الضبابية واضحة وحادة، كأنك ارتديت نظارة.' },
     desc: { en: 'Like putting on glasses when everything looks blurry, this spell makes soft, smudgy edges bold and clear again. Choose it for a ghost that looks like a soft, blurry smear.',
             ar: 'كأنك ارتديت نظارة بعد أن كان كل شيء ضبابيًا، تجعل هذه التعويذة الحواف الباهتة قوية وواضحة من جديد. اخترها للشبح الذي يبدو كبقعة ناعمة ومشوّشة.' } },
   { color: '#22e06a', rgb: [34, 224, 106], kernel: [0, -1, 0, -1, 4, -1, 0, -1, 0], norm: null,
-    name: { en: 'THE EDGE SEEKER', ar: 'باحث الحواف' }, op: { en: 'Laplacian Edge Detection', ar: 'كشف الحواف اللابلاسي' },
+    name: { en: 'THE OUTLINE FINDER', ar: 'محدد الحواف' }, op: { en: 'Laplacian Edge Detection', ar: 'كشف الحواف اللابلاسي' },
     colorName: { en: 'GREEN', ar: 'أخضر' },
     fn: { en: 'Shows only the outlines of hidden shapes, like a coloring-book page.', ar: 'يُظهر الخطوط الخارجية للأشكال المختبئة فقط، مثل صفحة تلوين.' },
     desc: { en: 'This spell ignores the flat colors and lights up only the outlines, like a coloring-book page, so a shape hiding in the fog shows its borders. Choose it for a ghost that is a dim, smooth shape blending into the fog.',
             ar: 'تتجاهل هذه التعويذة الألوان الممتلئة وتُضيء الخطوط الخارجية فقط، مثل صفحة تلوين، فيظهر الشكل المختبئ في الضباب بحدوده. اخترها للشبح الذي يبدو كشكل خافت وناعم يذوب في الضباب.' } },
   { color: '#b45cff', rgb: [180, 92, 255], kernel: [-2, -1, 0, -1, 1, 1, 0, 1, 2], norm: null,
-    name: { en: 'THE EMBOSS CURSE', ar: 'لعنة النقش البارز' }, op: { en: 'Embossing', ar: 'النقش البارز' },
+    name: { en: 'THE CARVING CHARM', ar: 'محدد البصمات' }, op: { en: 'Embossing', ar: 'النقش البارز' },
     colorName: { en: 'PURPLE', ar: 'بنفسجي' },
     fn: { en: 'Makes faint marks pop out like carvings in stone.', ar: 'يُبرز العلامات الباهتة كأنها نقوش في الحجر.' },
     desc: { en: 'Like pressing a coin into clay, this spell turns tiny, nearly invisible differences into bumps and shadows, so hidden carvings pop out of the stone. Choose it for a ghost that looks like a flat, blank slab of stone.',
             ar: 'كأنك تضغط عملة على الطين، تحوّل هذه التعويذة الفروق الصغيرة شبه الخفية إلى نتوءات وظلال، فتبرز النقوش المخفية من الحجر. اخترها للشبح الذي يبدو كلوح حجري مسطّح وفارغ.' } },
   { color: '#ffd92e', rgb: [255, 217, 46], kernel: [0, 0, 0, 1, 1, 1, 0, 0, 0], norm: '1/3',
-    name: { en: 'THE PHANTOM TRAIL', ar: 'أثر الشبح' }, op: { en: 'Motion Blur', ar: 'تمويه الحركة' },
+    name: { en: 'THE STREAK-MAKER CHARM', ar: 'تعويذة الأثر السريع' }, op: { en: 'Motion Blur', ar: 'تمويه الحركة' },
     colorName: { en: 'YELLOW', ar: 'أصفر' },
     fn: { en: 'Fills in the gaps and smears things into one smooth streak.', ar: 'يملأ الفراغات ويمدّ الأشياء في أثر واحد متصل.' },
     desc: { en: 'Like a long-exposure photo of a speeding car, this spell smears each dot sideways and fills in the gaps, so broken pieces join into one smooth streak. Choose it for a ghost chopped into thin stripes with gaps.',
@@ -35,11 +35,11 @@ const SPELLS = [
 ];
 // ghost type i is bound to spell i (consistent for the whole game)
 const GHOSTS = [
-  { name: { en: 'THE WANDERING WRAITH', ar: 'الشبح الهائم' }, color: '#3d8bff', rgb: [61, 139, 255] },
-  { name: { en: 'THE CRIMSON REAPER', ar: 'الحاصد القرمزي' }, color: '#ff3b3b', rgb: [255, 59, 59] },
-  { name: { en: 'THE HOLLOW WATCHER', ar: 'المراقب الأجوف' }, color: '#22e06a', rgb: [34, 224, 106] },
-  { name: { en: 'THE ENGRAVED PHANTOM', ar: 'الشبح المنقوش' }, color: '#b45cff', rgb: [180, 92, 255] },
-  { name: { en: 'THE PHANTOM DRIFTER', ar: 'الشبح الجوّال' }, color: '#ffd92e', rgb: [255, 217, 46] }
+  { name: { en: 'THE FOGGY GHOST', ar: 'شبح الضباب' }, color: '#3d8bff', rgb: [61, 139, 255] },
+  { name: { en: 'THE RED-HOODED GHOST', ar: 'الشبح صاحب القبعة الحمرا' }, color: '#ff3b3b', rgb: [255, 59, 59] },
+  { name: { en: 'THE FOG WATCHER', ar: 'حارس الضباب' }, color: '#22e06a', rgb: [34, 224, 106] },
+  { name: { en: 'THE CARVED GHOST', ar: 'شبح النقوش' }, color: '#b45cff', rgb: [180, 92, 255] },
+  { name: { en: 'THE SPEEDY GHOST', ar: 'الشبح السريع' }, color: '#ffd92e', rgb: [255, 217, 46] }
 ];
 // scale/z: sprite size & float height (wall height = 1). speed: cells/s. hw: hit-box half width (fraction of sprite)
 const GPAR = [

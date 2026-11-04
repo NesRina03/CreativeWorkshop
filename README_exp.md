@@ -51,7 +51,7 @@ Then open `http://localhost:8000`.
 | **B** | Open the spellbook |
 | **M** | Show/hide the minimap |
 | **H** | Replay the intro story |
-| Click / Space | Shoot (capture a revealed ghost) |
+| Click / Space / Enter | Shoot (capture a revealed ghost) |
 | Tab | Free the mouse cursor |
 | Esc | Pause |
 

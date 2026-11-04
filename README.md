@@ -20,22 +20,33 @@ Open `http://localhost:8000`. The game loads its local images and fonts, so it d
 third-party services or a build step. Do not open `index.html` directly with `file://`; use a local
 server.
 
+## Host on GitHub Pages
+
+The game is a static site and its CSS, JavaScript, and font URLs are relative to the repository root.
+To publish it, push the repository to GitHub, then in **Settings → Pages** choose **Deploy from a
+branch**, select the branch and `/(root)` folder, and save. GitHub Pages will provide the site URL
+after deployment.
+
+On phones, play in landscape orientation. Drag on the right side of the game to look, use the
+on-screen pad to move, and tap **Find** or **Catch** for those actions. The lens, spellbook, map,
+and pause controls remain available in the HUD.
+
 ## Menu and round
 
 The main menu has Play, Options, Language, and Exit. Options have separate sound and music volume
 controls. Language offers English and Arabic. The pause menu offers Resume, Restart, Options,
 Language, and Exit; press `Esc` to pause or resume.
 
-1. Play opens a skippable mission briefing. Press `Enter` to skip, or press `Space` / click to step
-   through it. The HUD help button reopens the briefing during a round.
-2. Explore the corridors and press `F` near a formula to collect it. Its name, function, color, and
-   kernel are shown, and it is added to the backpack.
-3. Turn on the lens with `L` or the HUD button to see distorted ghosts. Ghosts are invisible while
+1. Play opens a skippable mission briefing. Press `Enter`, `Space`, or click to step through it;
+   press `Esc` to skip. The HUD help button reopens the briefing during a round.
+2. Explore the corridors and press `F` near a spell to collect it. Its child-friendly name,
+   description, color, and kernel are shown, and it is added to the spellbook.
+3. Turn on the lens with `L` or the HUD button to see hidden ghosts. Ghosts are invisible while
    the lens is off.
 4. Aim at a distorted ghost and open the backpack with `B`. Select one of the formulas you have
    collected and choose **Cast on Ghost**. A correct formula reveals the ghost; a wrong formula
    uses one of its two chances. The second wrong choice ends the round.
-5. Aim at a revealed ghost and click or press `Space` to catch it.
+5. Aim at a revealed ghost and click, press `Space`, or press `Enter` to catch it.
 
 The timer is set from the random ghost total (two minutes plus 50 seconds per ghost). Catch every
 ghost before it expires to win.
@@ -53,9 +64,11 @@ ghost before it expires to win.
 | Show or hide the map | `M` or click the map HUD button |
 | Choose a backpack entry | Click it, press `1`–`5`, or use `↑` / `↓` |
 | Cast a formula on the targeted ghost | Select it and click **Cast on Ghost** or press `Enter` |
-| Catch a revealed ghost | Aim and click or press `Space` |
+| Catch a revealed ghost | Aim and click, press `Space`, or press `Enter` |
 | Reopen the briefing | Click the `?` HUD button |
 | Pause or resume | `Esc` or the pause HUD button |
+| Phone: move / look | Drag the on-screen pad / drag the scene |
+| Phone: collect / catch | Tap **Find** / **Catch** |
 
 The cursor stays visible; dragging on the scene looks around, and clicking without dragging attempts
 to catch a revealed ghost. HUD controls remain available while playing.
@@ -66,14 +79,15 @@ Each ghost type is matched to the formula with the same index:
 
 | Ghost | Formula | Image operation |
 | --- | --- | --- |
-| The Wandering Wraith | The Gaussian Veil | Gaussian blur |
-| The Crimson Reaper | The Sharpening Rune | Sharpening |
-| The Hollow Watcher | The Edge Seeker | Laplacian edge detection |
-| The Engraved Phantom | The Emboss Curse | Embossing |
-| The Phantom Drifter | The Phantom Trail | Directional motion blur |
+| The Foggy Ghost | The Fog-Clearing Charm | Covered in fuzzy spots |
+| The Red-Hooded Ghost | The Sharp-Eye Charm | Blurry red shape |
+| The Fog Watcher | The Outline Finder | Faint shape blending into fog |
+| The Carved Ghost | The Carving Charm | Flat stone with hidden carvings |
+| The Speedy Ghost | The Streak-Maker Charm | Split into thin stripes |
 
 The HUD tracks caught and remaining ghosts for every type, time remaining, and collected formulas
-out of five. Formula kernels and descriptions are available in the backpack.
+out of five. Spell descriptions are available in the spellbook. The technical filter names are
+introduced in the lesson after a win.
 
 ## Project structure
 

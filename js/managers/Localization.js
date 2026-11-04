@@ -3,14 +3,14 @@
 /*i18n */
 const L = {
   en: {
-    title: 'THE HAUNTED HOUSE', subtitle: 'The Five Convolutions',
+    title: 'THE HAUNTED HOUSE', subtitle: 'Five Magic Spells',
     play: 'PLAY', options: 'OPTIONS', language: 'LANGUAGE', exit: 'EXIT', back: 'BACK',
     sound: 'SOUND', music: 'MUSIC', resume: 'RESUME', restart: 'RESTART', mainMenu: 'MAIN MENU', paused: 'PAUSED',
-    skip: 'Press ENTER to skip', next: 'SPACE / CLICK: next', cont: 'CONTINUE',
+    skip: 'Press ESC to skip', next: 'ENTER / SPACE / CLICK: next', cont: 'CONTINUE',
     spellFound: 'SPELL DISCOVERED', bookTitle: 'SPELLBOOK', cast: 'CAST ON GHOST',
     left: 'left', tipLens: 'Magical lens [L]', tipBook: 'Spellbook [B]', tipHelp: 'Help / intro [H]', tipMap: 'Map [M]', tipPause: 'Pause [ESC]',
-    keys: 'WASD move · MOUSE look · F collect · L lens · B book · M map · H help · CLICK shoot · TAB free cursor',
-    collect: '[F] Collect Spell', identify: '[B] Open spellbook to identify', shootIt: 'CLICK to capture!',
+    keys: 'WASD move · MOUSE look · F collect · L lens · B book · M map · H help · CLICK / ENTER shoot · TAB free cursor',
+    collect: '[F] Collect Spell', identify: '[B] Open spellbook to identify', shootIt: 'CLICK / ENTER to capture!',
     lensOn: 'LENS ON', lensOff: 'LENS OFF', wrong: 'WRONG SPELL!', attemptsLeft: 'attempt left',
     attemptsLbl: 'ATTEMPTS', captured: 'GHOST CAPTURED!', spellGot: 'SPELL COLLECTED!', identified: 'GHOST REVEALED!', scanning: 'REVEALING...',
     needReveal: 'Reveal it with the right spell first!', detected: 'GHOST DETECTED!', noGhostLooked: 'Nothing to capture here',
@@ -22,24 +22,25 @@ const L = {
     rTime: 'The clock reached zero.', rSpell: 'Two wrong spells on the same ghost.',
     sGhosts: 'Ghosts captured', sTime: 'Time remaining', sSpells: 'Spells collected',
     thanks: 'THANKS FOR PLAYING!', byeMsg: 'You can now close this tab.',
+    touchCollect: 'FIND', touchShoot: 'CATCH', rotate: 'Rotate your phone to landscape to play.',
     cs: [
       'You have entered a mansion haunted by five kinds of spirits. They hide from ordinary vision, wandering through its corridors unseen.',
       'Fortunately, you possess an enchanted lens capable of revealing supernatural entities. But seeing them is not enough.',
-      'Each ghost is bound to a particular convolution spell. To reveal its true form, you must discover the correct spell and apply it.',
+      'Each ghost has a special spell that can reveal it. Find the right spell and try it.',
       'Five ancient spells are hidden throughout the mansion. Find them, collect them, and study their properties. Your spellbook will preserve every spell you discover.',
       'Use your lens, identify the ghosts, apply the correct spells, and capture every spirit.',
       'But be careful... time is running out. Catch them all before the clock reaches zero.'
     ]
   },
   ar: {
-    title: 'البيت المسكون', subtitle: 'الالتفافات الخمس',
+    title: 'دار الخلايع', subtitle: 'خمس تعاويذ سحرية',
     play: 'ابدأ اللعب', options: 'الخيارات', language: 'اللغة', exit: 'خروج', back: 'رجوع',
     sound: 'الصوت', music: 'الموسيقى', resume: 'متابعة', restart: 'إعادة', mainMenu: 'القائمة الرئيسية', paused: 'إيقاف مؤقت',
-    skip: 'اضغط ENTER للتخطي', next: 'SPACE / نقرة: التالي', cont: 'متابعة',
+    skip: 'اضغط ESC للتخطي', next: 'ENTER / SPACE / نقرة: التالي', cont: 'متابعة',
     spellFound: 'تم اكتشاف تعويذة', bookTitle: 'كتاب التعاويذ', cast: 'أطلق التعويذة',
     left: 'متبقي', tipLens: 'العدسة السحرية [L]', tipBook: 'كتاب التعاويذ [B]', tipHelp: 'مساعدة / المقدمة [H]', tipMap: 'الخريطة [M]', tipPause: 'إيقاف مؤقت [ESC]',
-    keys: 'WASD حركة · الفأرة نظر · F جمع · L عدسة · B كتاب · M خريطة · H مساعدة · نقرة إطلاق · TAB تحرير المؤشر',
-    collect: '[F] اجمع التعويذة', identify: '[B] افتح الكتاب لتحديد الشبح', shootIt: 'انقر لأسر الشبح!',
+    keys: 'WASD حركة · الفأرة نظر · F جمع · L عدسة · B كتاب · M خريطة · H مساعدة · نقرة / ENTER إطلاق · TAB تحرير المؤشر',
+    collect: '[F] اجمع التعويذة', identify: '[B] افتح الكتاب لتحديد الشبح', shootIt: 'انقر / ENTER لأسر الشبح!',
     lensOn: 'العدسة: تعمل', lensOff: 'العدسة: متوقفة', wrong: 'تعويذة خاطئة!', attemptsLeft: 'محاولة متبقية',
     attemptsLbl: 'المحاولات', captured: 'تم أسر الشبح!', spellGot: 'تم جمع التعويذة!', identified: 'تم كشف الشبح!', scanning: 'جارٍ الكشف...',
     needReveal: 'اكشفه بالتعويذة الصحيحة أولاً!', detected: 'تم رصد شبح!', noGhostLooked: 'لا يوجد ما يمكن أسره هنا',
@@ -51,10 +52,11 @@ const L = {
     rTime: 'انتهى الوقت.', rSpell: 'تعويذتان خاطئتان على الشبح نفسه.',
     sGhosts: 'الأشباح المأسورة', sTime: 'الوقت المتبقي', sSpells: 'التعاويذ المجموعة',
     thanks: 'شكرًا للعب!', byeMsg: 'يمكنك الآن إغلاق هذه الصفحة.',
+    touchCollect: 'فتّش', touchShoot: 'أسر', rotate: 'دور تليفونك بالعرض باش تلعب.',
     cs: [
       'لقد دخلتَ قصرًا تسكنه خمسة أنواع من الأرواح. تختبئ عن الأنظار العادية، وتجول في ممراته دون أن تُرى.',
       'لحسن الحظ، تملك عدسة مسحورة قادرة على كشف الكائنات الخارقة. لكن رؤيتها لا تكفي.',
-      'كل شبح مرتبط بتعويذة التفاف معيّنة. ولكشف هيئته الحقيقية عليك أن تجد التعويذة الصحيحة وتطبّقها.',
+      'كل شبح عندو تعويذة خاصة بيه. لقا التعويذة الصحيحة باش تكشفو.',
       'خمس تعاويذ قديمة مخبأة في أرجاء القصر. اعثر عليها واجمعها وادرس خصائصها. وسيحفظ كتاب التعاويذ كل تعويذة تكتشفها.',
       'استخدم عدستك، وحدّد الأشباح، وطبّق التعاويذ الصحيحة، وأسِر كل روح.',
       'لكن احذر... الوقت ينفد. أسِرهم جميعًا قبل أن تصل الساعة إلى الصفر.'

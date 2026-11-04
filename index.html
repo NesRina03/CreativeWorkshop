@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>The Haunted House: The Five Convolutions</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -30,6 +30,15 @@
     <div id="prompt"></div>
     <div id="toast"></div>
     <div id="clickHint"></div>
+    <div id="touchControls">
+      <div id="touchMove" aria-label="Move">
+        <div id="touchThumb"></div>
+      </div>
+      <div id="touchActions">
+        <button id="touchCollect" class="touchBtn" data-i="touchCollect">FIND</button>
+        <button id="touchShoot" class="touchBtn" data-i="touchShoot">CATCH</button>
+      </div>
+    </div>
     <canvas id="minimap" width="192" height="144"></canvas>
   </div>
 
@@ -93,7 +102,6 @@
   <div id="spellPanel" class="screen dim hidden">
     <div class="panel" id="spBox" style="width:600px">
       <div class="spHead"><img id="spIcon" alt=""><div><div class="spTag" data-i="spellFound">SPELL DISCOVERED</div><div id="spTitle"></div></div></div>
-      <div id="spOp"></div>
       <div id="spFn"></div>
       <div id="spMatrix"></div>
       <div id="spNorm"></div>
@@ -186,6 +194,7 @@
     <div class="menuBtns"><button class="btn" id="byeBack" data-i="mainMenu">MAIN MENU</button></div>
   </div>
 </div>
+<div id="rotateNotice" data-i="rotate">Rotate your phone to landscape to play.</div>
 <script src="js/core/constants.js"></script>
 <script src="js/managers/Localization.js"></script>
 <script src="js/managers/ImageManager.js"></script>

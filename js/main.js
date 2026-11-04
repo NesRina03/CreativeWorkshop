@@ -24,6 +24,12 @@ bind('btnBook', () => { if (G.state === 'playing') openBook(); else if (G.state 
 bind('btnPause', openPause);
 bind('btnMap', toggleMap);
 $('cutscene').addEventListener('click', () => { AU.init(); csAdvance(); });
+$('touchCollect').addEventListener('pointerdown', (e) => {
+  e.preventDefault(); e.stopPropagation(); AU.init(); collectSpell();
+});
+$('touchShoot').addEventListener('pointerdown', (e) => {
+  e.preventDefault(); e.stopPropagation(); AU.init(); shoot();
+});
 $('volSfx').addEventListener('input', (e) => { G.sfxVol = e.target.value / 100; AU.vol.sfx = G.sfxVol; AU.setVol(); $('vSfxTxt').textContent = e.target.value; save(); });
 $('volSfx').addEventListener('change', () => sfx('ui'));
 $('volMus').addEventListener('input', (e) => { G.musVol = e.target.value / 100; AU.vol.mus = G.musVol; AU.setVol(); $('vMusTxt').textContent = e.target.value; save(); });
@@ -33,6 +39,52 @@ view.addEventListener('mousedown', (e) => {
   if (document.pointerLockElement !== view) { lockPointer(); return; }
   shoot();
 });
+const touchLook = { id: null, x: 0, moved: false };
+view.addEventListener('pointerdown', (e) => {
+  if (e.pointerType !== 'touch' || G.state !== 'playing') return;
+  e.preventDefault(); AU.init();
+  touchLook.id = e.pointerId; touchLook.x = e.clientX; touchLook.moved = false;
+  view.setPointerCapture(e.pointerId);
+});
+view.addEventListener('pointermove', (e) => {
+  if (e.pointerType !== 'touch' || e.pointerId !== touchLook.id || G.state !== 'playing') return;
+  const dx = e.clientX - touchLook.x;
+  if (Math.abs(dx) > 1) touchLook.moved = true;
+  P.a += dx * 0.008;
+  touchLook.x = e.clientX;
+});
+function finishTouchLook(e) {
+  if (e.pointerId !== touchLook.id) return;
+  if (!touchLook.moved && G.state === 'playing') shoot();
+  touchLook.id = null;
+}
+view.addEventListener('pointerup', finishTouchLook);
+view.addEventListener('pointercancel', (e) => { if (e.pointerId === touchLook.id) touchLook.id = null; });
+const touchMove = $('touchMove'), touchThumb = $('touchThumb'), touchStick = { id: null, x: 0, y: 0 };
+function clearTouchMove() {
+  touchStick.id = null;
+  keys.KeyW = keys.KeyA = keys.KeyS = keys.KeyD = false;
+  touchThumb.style.transform = 'translate(0,0)';
+}
+function updateTouchMove(e) {
+  const dx = e.clientX - touchStick.x, dy = e.clientY - touchStick.y;
+  const len = Math.hypot(dx, dy), scale = len > 42 ? 42 / len : 1;
+  const x = dx * scale, y = dy * scale;
+  touchThumb.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+  keys.KeyA = x < -12; keys.KeyD = x > 12;
+  keys.KeyW = y < -12; keys.KeyS = y > 12;
+}
+touchMove.addEventListener('pointerdown', (e) => {
+  if (e.pointerType !== 'touch' || G.state !== 'playing') return;
+  e.preventDefault(); e.stopPropagation(); AU.init();
+  touchStick.id = e.pointerId; touchStick.x = e.clientX; touchStick.y = e.clientY;
+  touchMove.setPointerCapture(e.pointerId); updateTouchMove(e);
+});
+touchMove.addEventListener('pointermove', (e) => {
+  if (e.pointerId === touchStick.id) updateTouchMove(e);
+});
+touchMove.addEventListener('pointerup', (e) => { if (e.pointerId === touchStick.id) clearTouchMove(); });
+touchMove.addEventListener('pointercancel', (e) => { if (e.pointerId === touchStick.id) clearTouchMove(); });
 window.addEventListener('keydown', (e) => {
   AU.init(); const c = e.code;
   if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(c)) e.preventDefault();
@@ -40,7 +92,9 @@ window.addEventListener('keydown', (e) => {
   keys[c] = true;
   switch (G.state) {
     case 'cutscene':
-      if (c === 'Enter' || c === 'NumpadEnter') endCutscene(); else if (c === 'Space') csAdvance(); break;
+      if (c === 'Enter' || c === 'NumpadEnter' || c === 'Space') csAdvance();
+      else if (c === 'Escape') endCutscene();
+      break;
     case 'playing':
       if (c === 'KeyF') collectSpell();
       else if (c === 'KeyL') toggleLens();
@@ -48,7 +102,7 @@ window.addEventListener('keydown', (e) => {
       else if (c === 'KeyM' || e.key.toLowerCase() === 'm') toggleMap();
       else if (c === 'KeyH') startCutscene('help');
       else if (c === 'Escape') openPause();
-      else if (c === 'Space') shoot();
+      else if (c === 'Space' || c === 'Enter' || c === 'NumpadEnter') shoot();
       else if (c === 'Tab') releasePointer();
       break;
     case 'book':
@@ -72,7 +126,7 @@ window.addEventListener('keydown', (e) => {
   }
 });
 window.addEventListener('keyup', (e) => { keys[e.code] = false; });
-window.addEventListener('blur', () => { for (const k in keys) keys[k] = false; if (G.state === 'playing') openPause(); });
+window.addEventListener('blur', () => { for (const k in keys) keys[k] = false; clearTouchMove(); if (G.state === 'playing') openPause(); });
 document.addEventListener('visibilitychange', () => { if (document.hidden && G.state === 'playing') openPause(); });
 window.addEventListener('contextmenu', (e) => e.preventDefault());
 

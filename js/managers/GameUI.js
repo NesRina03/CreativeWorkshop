@@ -112,7 +112,10 @@ function setLang(l) {
 }
 
 /* ---- pointer lock ---- */
-function lockPointer() { try { if (document.pointerLockElement !== view) { const p = view.requestPointerLock(); if (p && p.catch) p.catch(() => {}); } } catch (e) {} }
+function lockPointer() {
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+  try { if (document.pointerLockElement !== view) { const p = view.requestPointerLock(); if (p && p.catch) p.catch(() => {}); } } catch (e) {}
+}
 function releasePointer() { if (document.pointerLockElement) { expectUnlock = true; document.exitPointerLock(); } }
 document.addEventListener('pointerlockchange', () => {
   if (!document.pointerLockElement) {
@@ -167,7 +170,7 @@ function collectSpell() {
 function fillSpellPanel(i) {
   if (i === undefined) return; const sp = SPELLS[i];
   $('spIcon').src = RUNE_URL[i]; $('spTitle').textContent = sp.name[G.lang]; $('spTitle').style.color = sp.color;
-  $('spOp').textContent = sp.op[G.lang] + ' — ' + sp.colorName[G.lang]; $('spFn').textContent = sp.fn[G.lang];
+  $('spFn').textContent = sp.fn[G.lang];
   $('spMatrix').innerHTML = matrixHTML(sp, false);
   $('spNorm').textContent = sp.norm ? tr('normLbl') + ': ' + sp.norm : '';
   $('spBox').style.boxShadow = 'inset 0 0 0 4px ' + sp.color + ',inset 0 0 0 8px #2c1a10,0 0 0 4px ' + sp.color;
@@ -202,7 +205,7 @@ function renderBook() {
   $('bkHint').textContent = G.bookGhost ? tr('selectHint') : tr('browseHint');
   const sp = SPELLS[G.sel], d = $('bkDetail');
   if (G.collected[G.sel]) {
-    d.innerHTML = '<div class="bkTitle" style="color:' + sp.color + '">' + sp.name[lang] + '</div><div class="bkOp">' + sp.op[lang] + '</div>' +
+    d.innerHTML = '<div class="bkTitle" style="color:' + sp.color + '">' + sp.name[lang] + '</div>' +
       '<div class="bkDesc">' + sp.desc[lang] + '</div><div class="bkMx">' + matrixHTML(sp, true) + '</div>' +
       (sp.norm ? '<div class="bkNorm">' + tr('normLbl') + ': ' + sp.norm + '</div>' : '<div class="bkNorm">&nbsp;</div>') +
       '<div class="bkColor"><span>' + tr('colorLbl') + ':</span><i style="background:' + sp.color + '"></i><span>' + sp.colorName[lang] + '</span></div>';
@@ -328,24 +331,24 @@ Object.assign(L.ar, {
 const LESSON = [
   { does: { en: 'Every pixel becomes a weighted average of its neighbors, and the center counts the most. The weights add up to 16, so we divide by 16 to keep the brightness.',
             ar: 'يصبح كل بكسل متوسطًا مرجّحًا لجيرانه، ويحظى المركز بأكبر وزن. مجموع الأوزان 16، لذلك نقسم على 16 للحفاظ على السطوع.' },
-    effect: { en: 'Before, the Wandering Wraith was buried in TV static. Averaging the neighbors cancels the random speckles and leaves a smooth, clean figure.',
-              ar: 'قبل التعويذة كان الشبح الهائم مدفونًا في ضجيج التلفاز. متوسط الجيران يلغي البقع العشوائية ويترك شكلًا ناعمًا ونظيفًا.' } },
+    effect: { en: 'The Foggy Ghost was hidden by fuzzy spots. Blending nearby dots clears the spots and shows its shape.',
+              ar: 'كان شبح الضباب مخفيًا وسط بقع مشوشة. مزج النقاط القريبة ينظّفها ويُظهر شكله.' } },
   { does: { en: 'The center is boosted (5) and the four direct neighbors are subtracted (-1 each). Wherever a pixel differs from its neighbors, that difference is exaggerated.',
             ar: 'يُضخَّم المركز (5) وتُطرح البكسلات الأربعة المجاورة (-1 لكل منها). فكلما اختلف البكسل عن جيرانه تضخّم هذا الفرق.' },
-    effect: { en: 'Before, the Crimson Reaper was an out-of-focus red smear. Sharpening boosts the edges and brings back its crisp hood and scythe.',
-              ar: 'قبل التعويذة كان الحاصد القرمزي بقعة حمراء خارج التركيز. يعزّز الشحذ الحواف ويعيد له قلنسوته ومنجله الحادّين.' } },
+    effect: { en: 'The Red-Hooded Ghost looked like a blurry red smudge. Making its edges clearer brings back its hood and shape.',
+              ar: 'كان الشبح صاحب القبعة الحمرا بقعة حمراء مغبشة. توضيح حوافه يُظهر قبعته وشكله من جديد.' } },
   { does: { en: 'The center (4) minus its four neighbors. In flat areas the sum is 0 (black). Where brightness changes suddenly, the result is large.',
             ar: 'المركز (4) مطروحًا منه البكسلات الأربعة المجاورة. في المناطق المتجانسة يكون المجموع 0 (أسود)، وعند أي تغيّر مفاجئ في السطوع تكون النتيجة كبيرة.' },
-    effect: { en: 'Before, the Hollow Watcher was a smooth shape hiding in the fog. Flat areas turn to zero, so only its glowing outline and eye ring remain.',
-              ar: 'قبل التعويذة كان المراقب الأجوف شكلًا ناعمًا يختبئ في الضباب. تتحول المناطق المتجانسة إلى صفر، فلا يبقى إلا محيطه المتوهج وحلقة عينه.' } },
+    effect: { en: 'The Fog Watcher blended into the mist. The spell shows its bright outline and the ring around its eye.',
+              ar: 'كان حارس الضباب يذوب وسط الضباب. التعويذة تبيّن حدوده المضيئة والدائرة حول عينه.' } },
   { does: { en: 'The weights are negative on one diagonal and positive on the opposite one, so the result measures brightness change in one direction. A constant is added so flat areas look mid-gray.',
             ar: 'الأوزان سالبة على قطر وموجبة على القطر المقابل، فتقيس النتيجة تغيّر السطوع في اتجاه واحد. وتُضاف قيمة ثابتة كي تظهر المناطق المتجانسة رمادية.' },
-    effect: { en: 'Before, the Engraved Phantom was a flat, blank slab. Emboss turns tiny differences into shading, so its carvings stand out as raised relief.',
-              ar: 'قبل التعويذة كان الشبح المنقوش لوحًا مسطحًا فارغًا. يحوّل النقش البارز الفروق الصغيرة إلى ظلال، فتبرز نقوشه كأنها ناتئة.' } },
+    effect: { en: 'The Carved Ghost looked like a plain stone slab. The spell adds light and shadow so its carvings stand out.',
+              ar: 'كان شبح النقوش يشبه حجرًا مسطحًا. التعويذة تزيد الضوء والظل باش تبان نقوشو.' } },
   { does: { en: 'Only the middle row of weights is non-zero, so each pixel is averaged with its left and right neighbors (divided by 3). Gaps between the stripes get filled in.',
             ar: 'الصف الأوسط فقط من الأوزان غير صفري، فيُحسب متوسط كل بكسل مع جاريه على اليسار واليمين (القسمة على 3). فتمتلئ الفراغات بين الشرائح.' },
-    effect: { en: 'Before, the Phantom Drifter was chopped into thin stripes. Motion blur smears them sideways and fills the gaps into one streak.',
-              ar: 'قبل التعويذة كان الشبح الجوّال مقطّعًا إلى شرائح رفيعة. يمدّها تمويه الحركة جانبيًا ويملأ الفراغات في أثر واحد.' } }
+    effect: { en: 'The Speedy Ghost was split into thin stripes. The spell joins them into one long streak.',
+              ar: 'كان الشبح السريع مقسوم لشرائح رقيقة. التعويذة تجمعهم في أثر طويل واحد.' } }
 ];
 const EN = { idx: 0, pos: -40, img: {} };
 const enB = $('enB'), enA = $('enA'), ebx = enB.getContext('2d'), eax = enA.getContext('2d');
