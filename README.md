@@ -51,7 +51,7 @@ ghost before it expires to win.
 | Toggle the lens | `L` or click the lens HUD button |
 | Open the backpack | `B` or click the backpack HUD button |
 | Show or hide the map | `M` or click the map HUD button |
-| Choose a backpack entry | Click it or press `1`–`5` |
+| Choose a backpack entry | Click it, press `1`–`5`, or use `↑` / `↓` |
 | Cast a formula on the targeted ghost | Select it and click **Cast on Ghost** or press `Enter` |
 | Catch a revealed ghost | Aim and click or press `Space` |
 | Reopen the briefing | Click the `?` HUD button |

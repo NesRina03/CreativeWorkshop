@@ -183,6 +183,12 @@ function openBook() {
   $('bkMsg').textContent = ''; renderBook(); showScreen('book');
 }
 function closeBook() { if (G.state !== 'book') return; hideScreens(); G.state = 'playing'; G.bookGhost = null; sfx('book'); lockPointer(); }
+function selectBookSpell(index) {
+  G.sel = index;
+  $('bkMsg').textContent = '';
+  renderBook();
+  sfx('ui');
+}
 function renderBook() {
   const lang = G.lang, list = $('bkList'); list.innerHTML = '';
   SPELLS.forEach((s, i) => {
@@ -190,7 +196,7 @@ function renderBook() {
     row.innerHTML = G.collected[i]
       ? '<img src="' + RUNE_URL[i] + '" alt=""><span class="nm" style="color:' + s.color + '">' + (i + 1) + '. ' + s.name[lang] + '</span><i class="sw" style="background:' + s.color + '"></i>'
       : '<img src="' + ICON.lock + '" alt=""><span class="nm">' + (i + 1) + '. ??? ???</span>';
-    row.onclick = () => { G.sel = i; sfx('ui'); $('bkMsg').textContent = ''; renderBook(); };
+    row.onclick = () => selectBookSpell(i);
     list.appendChild(row);
   });
   $('bkHint').textContent = G.bookGhost ? tr('selectHint') : tr('browseHint');
