@@ -1,6 +1,6 @@
 'use strict';
 
-/* ============================ 2. GAME DATA ============================ */
+/*GAME DATA */
 const SPELLS = [
   { color: '#3d8bff', rgb: [61, 139, 255], kernel: [1, 2, 1, 2, 4, 2, 1, 2, 1], norm: '1/16',
     name: { en: 'THE GAUSSIAN VEIL', ar: 'حجاب غاوس' }, op: { en: 'Gaussian Blur', ar: 'تمويه غاوسي' },
@@ -50,7 +50,7 @@ const GPAR = [
   { scale: 0.52, z: 0.32, bob: 0.08, speed: 3.2, rad: 3.0, w: [0.3, 1.1], hw: 0.28, cx: 0.65 }
 ];
 
-/* ============================ 7. SPRITES ============================== */
+/*SPRITES*/
 function dWraith(c, f) {
   const ph = f * Math.PI / 2;
   for (let y = 3; y < 31; y++) {

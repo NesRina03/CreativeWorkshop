@@ -1,6 +1,6 @@
 'use strict';
 
-/* ============================== 4. AUDIO ============================== */
+/*AUDIO*/
 const AU = (() => {
   let ctx = null, sfxG, musG, ambG, noiseBuf, musStep = 0, musTimer = null;
   const vol = { sfx: 0.7, mus: 0.5 };

@@ -1,6 +1,6 @@
 'use strict';
 
-/* ============================ 8. GAME STATE =========================== */
+/** GAME STATE */
 const G = {
   state: 'menu', lang: 'en', sfxVol: 0.7, musVol: 0.5, t: 0, wt: 0,
   time: 0, timeMax: 0, collected: [false, false, false, false, false], sel: 0, lens: false,
@@ -17,16 +17,16 @@ const SPELL_SPOTS = [[3.5, 2.5], [22.5, 2.5], [12.5, 14.5], [28.5, 14.5], [27.5,
 function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = (rnd() * (i + 1)) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
 function buildWorld() {
-  // ---- random distribution: every type gets 1..3 ghosts, HUD counts == spawned instances ----
+  //random distribution: every type gets 1..3 ghosts, HUD counts == spawned instances
   G.req = [0, 0, 0, 0, 0].map(() => 1 + ((rnd() * 3) | 0));
   G.cap = [0, 0, 0, 0, 0];
   const total = G.req.reduce((a, b) => a + b, 0);
   G.timeMax = 120 + 50 * total; G.time = G.timeMax;
   G.collected = [false, false, false, false, false]; G.sel = 0; G.lens = false; G.target = null; G.bookGhost = null;
-  // ---- spells ----
+  // spells
   const spots = shuffle(SPELL_SPOTS.slice());
   G.spellsW = SPELLS.map((s, i) => ({ id: i, x: spots[i][0], y: spots[i][1], got: false, ph: rnd() * TAU }));
-  // ---- ghosts ----
+  //ghosts
   const cand = [];
   for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
     if (MAP[y * MW + x]) continue;
@@ -49,7 +49,7 @@ function buildWorld() {
   P.x = 2.5; P.y = 8.5; P.a = 0;
 }
 
-/* ============================ 9. UPDATE =============================== */
+/*UPDATE */
 function addP(x, y, z, vx, vy, vz, life, c, sz) { if (parts.length > 520) parts.shift(); parts.push({ x, y, z, vx, vy, vz, l: life, m: life, c, s: sz || 0.022 }); }
 function burst(x, y, z, c, n) { for (let i = 0; i < n; i++) { const a = rnd() * TAU, s = 0.5 + rnd() * 1.6; addP(x, y, z, Math.cos(a) * s, Math.sin(a) * s, (rnd() - 0.2) * 1.6, 0.5 + rnd() * 0.7, c, 0.02 + rnd() * 0.025); } }
 function stepParts(dt) {

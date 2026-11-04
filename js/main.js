@@ -1,6 +1,6 @@
 'use strict';
 
-/* ============================ 12. INPUT & LOOP ======================== */
+/*INPUT & LOOP*/
 bind('mPlay', playGame);
 bind('mOptions', () => { G.backTo = 'menu'; showScreen('options'); });
 bind('mLanguage', () => { G.backTo = 'menu'; showScreen('language'); });
@@ -99,7 +99,7 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 
-/* ---- boot ---- */
+/*boot*/
 function boot() {
   load(); AU.vol.sfx = G.sfxVol; AU.vol.mus = G.musVol;
   buildIcons(); buildRunes(); buildProps(); buildHUD();

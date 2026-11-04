@@ -2,7 +2,7 @@
 
 function bind(id, fn) { $(id).addEventListener('click', (e) => { AU.init(); sfx('ui'); fn(e); e.currentTarget.blur(); }); }
 
-/* ============================== 11. UI ================================ */
+/*UI */
 const el = {
   hud: $('hud'), timer: $('timer'), gc: $('gcounters'), prompt: $('prompt'), toast: $('toast'), clickHint: $('clickHint'),
   lens: $('btnLens'), lensImg: $('lensImg'), crosshair: $('crosshair'), lensFx: $('lensFx'), flash: $('flashFx')

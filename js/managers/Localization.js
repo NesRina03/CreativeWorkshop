@@ -1,6 +1,6 @@
 'use strict';
 
-/* ============================== i18n ================================== */
+/*i18n */
 const L = {
   en: {
     title: 'THE HAUNTED HOUSE', subtitle: 'The Five Convolutions',

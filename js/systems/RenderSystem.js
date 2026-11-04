@@ -3,11 +3,11 @@
 const view = $('view'), vctx = view.getContext('2d');
 vctx.imageSmoothingEnabled = false;
 const img = vctx.createImageData(W, H), buf = new Uint32Array(img.data.buffer), zbuf = new Float32Array(W);
-/* =========================== 10. RENDERING ============================ */
+/* RENDERING */
 function renderWorld(lensOn, time, wtime) {
   const px_ = cam.x, py_ = cam.y, dx = cam.dx, dy = cam.dy, plx = -dy * FOV, ply = dx * FOV;
   const fk = flickerFactor(time), amb = 0.1 + (lensOn ? 0.1 : 0);
-  // ---------- floor & ceiling ----------
+  // floor & ceiling 
   const rx0 = dx - plx, ry0 = dy - ply, rx1 = dx + plx, ry1 = dy + ply;
   for (let y = HALF + 1; y < H; y++) {
     const rd = HALF / (y - HALF);
@@ -29,7 +29,7 @@ function renderWorld(lensOn, time, wtime) {
       buf[iC + x] = 0xFF000000 | ((b > 255 ? 255 : b) << 16) | ((gg > 255 ? 255 : gg) << 8) | (r > 255 ? 255 : r);
     }
   }
-  // ---------- walls ----------
+  //walls
   for (let x = 0; x < W; x++) {
     const camX = 2 * x / W - 1;
     let rdx = dx + plx * camX, rdy = dy + ply * camX;
@@ -65,7 +65,7 @@ function renderWorld(lensOn, time, wtime) {
       buf[y * W + x] = 0xFF000000 | ((b > 255 ? 255 : b) << 16) | ((gg > 255 ? 255 : gg) << 8) | (r > 255 ? 255 : r);
     }
   }
-  // ---------- lens tint (world only; sprites are drawn afterwards) ----------
+  //lens tint (world only; sprites are drawn afterwards)
   if (lensOn) {
     for (let y = 0; y < H; y++) {
       const sl = (y & 1) ? 0.86 : 1;
@@ -186,7 +186,7 @@ function renderFrame(cm, lensOn, time, wtime, interactive) {
   if (seenNew) G.pendingDetect = true;
   drawParticles();
   vctx.putImageData(img, 0, 0);
-  // ---------- targeting (crosshair vs ghost hit boxes) ----------
+  //targeting (crosshair vs ghost hit boxes)
   G.target = null;
   if (interactive && lensOn) {
     let best = null;
@@ -208,7 +208,7 @@ function renderFrame(cm, lensOn, time, wtime, interactive) {
       vctx.fillRect(x0, y1, l, 1); vctx.fillRect(x0, y1 - l, 1, l); vctx.fillRect(x1 - l, y1, l, 1); vctx.fillRect(x1, y1 - l, 1, l + 1);
     }
   }
-  // ---------- shot beam ----------
+  // shot beam 
   if (G.shotT > 0) {
     const k = G.shotT / 0.12; vctx.fillStyle = 'rgba(160,240,255,' + (0.4 + k * 0.5) + ')';
     for (let i = 0; i < 24; i++) { const t = i / 24, x = W / 2 + (G.shotTx - W / 2) * 0 + Math.sin(i * 2.3 + G.t * 40) * (1 - t) * 3, y = H - 2 - (H - 2 - HALF) * t; vctx.fillRect(Math.round(x), Math.round(y), 2, 3); }

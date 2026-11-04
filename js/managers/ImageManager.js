@@ -1,6 +1,6 @@
 'use strict';
 
-/* ============================ 3. PIXEL ICONS ========================== */
+/** PIXEL ICONS */
 function mkIcon(size, fn) { const c = mkCanvas(size, size); const x = c.getContext('2d'); fn(x); return c.toDataURL(); }
 const P1 = (x, col, a, b, w, h) => { x.fillStyle = col; x.fillRect(a, b, w || 1, h || 1); };
 const ICON = {};
