@@ -1,16 +1,26 @@
 /* ---------- cast scene (spell cast on a ghost) ---------- */
-#castScene{background:transparent;justify-content:flex-start}
+#castScene{background:transparent;justify-content:flex-start;touch-action:manipulation}
 #castCanvas{position:absolute;left:0;top:0;width:960px;height:600px;image-rendering:-moz-crisp-edges;image-rendering:pixelated;image-rendering:crisp-edges}
-#castBox{position:absolute;left:40px;right:40px;bottom:26px;min-height:96px;padding:16px 24px;display:flex;align-items:center;justify-content:center;
+#castBox{position:absolute;left:40px;right:40px;bottom:26px;min-height:96px;padding:16px 24px 16px 96px;display:flex;align-items:center;justify-content:center;
   background:rgba(10,5,14,.9);border:4px solid #000;box-shadow:inset 0 0 0 4px var(--cc,#7a5230),0 0 0 4px var(--cc,#7a5230)}
 #castText{font-size:calc(var(--fz)*13);line-height:1.9;color:#f1e4c4;text-align:center}
 #castText.bad{color:#ff8a7a}
 #castHint{position:absolute;right:18px;top:14px;font-size:calc(var(--fz)*10);color:#ffe9a8;text-shadow:2px 2px 0 #000;background:rgba(0,0,0,.55);padding:8px 12px}
 
-/* ---------- kid mode: big spell symbol (spell panel, spellbook, lesson) ---------- */
+/* ---------- kid mode: spell symbol + "scoop picture" (spell panel, spellbook, lesson) ---------- */
 .bigRune{width:96px;height:96px;image-rendering:pixelated;animation:runePulse 1.6s steps(4) infinite}
 @keyframes runePulse{50%{transform:scale(1.1)}}
+.scoop{width:112px;height:112px;flex:none;image-rendering:pixelated;background:#0e0816;border:3px solid var(--c,#6b4a2f);box-shadow:0 0 0 2px #000}
+.scoop.big{width:150px;height:150px}
 .bkHeartBox{display:flex;align-items:center;gap:16px;margin:8px 0 14px}
-.bkHeartBox .bigRune{width:84px;height:84px;flex:none;padding:6px;background:#241522;border:3px solid var(--c,#6b4a2f)}
 .bkHeartTxt{font-size:calc(var(--fz)*8);line-height:1.9;color:#3a2210}
-.enMid .bigRune{width:110px;height:110px}
+.enMid .scoop{width:130px;height:130px}
+
+/* ---------- win screen: stars + ghost album ---------- */
+.stats .starsRow,.stats .albumRow,.stats .albumLbl{justify-content:center;gap:10px}
+.stats .starsRow{margin-top:10px}
+.starsRow img{width:54px;height:42px;image-rendering:pixelated}
+.albumLbl{margin-top:8px;font-size:calc(var(--fz)*9);color:#b9a98a}
+.albumRow{margin-top:6px}
+.albumRow img{width:48px;height:48px;image-rendering:pixelated;background:#0e0816;border:3px solid #6b4a2f}
+.albumRow img.off{filter:brightness(0);opacity:.35}

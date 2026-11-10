@@ -1,17 +1,19 @@
 'use strict';
 
 /* ============================================================================
-   KID MODE: removes every grid / matrix / maths word from the screens the child sees.
+   KID MODE: every screen the child sees is told with pictures and stories, never with grids or maths.
    Loaded AFTER GameUI.js and BEFORE CastScene.js. It replaces:
-     - the "spell found" panel (no matrix, just the spell symbol)
-     - the spellbook (no matrix, just symbol + story)
-     - the intro cutscene page with the grid (now a symbol collecting sparkles)
-     - the ending lesson (no kernel / weights / "convolution"; a story instead)
+     - the "spell found" panel and the spellbook (symbol + "scoop picture": where the spell collects magic from)
+     - the intro cutscene page 4 (symbol collecting sparkles)
+     - the ending lesson (story, no kernel words)
+     - the end of the intro cutscene (starts the guided practice with Lumi)
+     - the win screen (stars + ghost album) and the capture toast (new sticker)
    ============================================================================ */
 
 Object.assign(L.en, {
   kidHow: 'It collects tiny pieces of magic around a heart and puts them inside it!',
-  kidSymbol: 'This is your spell symbol. Look for the same symbol on the ghost\'s grey heart!',
+  kidScoop: 'Where it collects magic: bright sparkles are taken from around the heart, big ones mean a lot. Dark ones add shadow.',
+  kidAlbum: 'GHOST ALBUM', kidSticker: 'NEW STICKER!',
   enIntroTitle: 'HOW DID THE SPELLS WORK?',
   enIntro1L: 'THE IDEA',
   enIntro1: 'Every ghost lost its magic heart. Your spell collects little pieces of magic around the heart, from right to left, and puts them inside. Then the heart comes back!',
@@ -21,7 +23,8 @@ Object.assign(L.en, {
 });
 Object.assign(L.ar, {
   kidHow: 'تجمع قطعًا صغيرة من السحر حول القلب وتضعها بداخله!',
-  kidSymbol: 'هذا رمز تعويذتك. ابحث عن الرمز نفسه على القلب الرمادي للشبح!',
+  kidScoop: 'من أين تجمع السحر: الشرارات المضيئة تؤخذ من حول القلب، والكبيرة تعني الكثير. أما الداكنة فتضيف ظلًّا.',
+  kidAlbum: 'ألبوم الأشباح', kidSticker: 'ملصق جديد!',
   enIntroTitle: 'كيف عملت التعاويذ؟',
   enIntro1L: 'الفكرة',
   enIntro1: 'كل شبح فقد قلبه السحري. تجمع تعويذتك قطعًا صغيرة من السحر حول القلب، من اليمين إلى اليسار، وتضعها بداخله. فيعود القلب!',
@@ -45,17 +48,40 @@ const KID_DOES = [
 ];
 KID_DOES.forEach((d, i) => { LESSON[i].does = d; });
 
-/* ---- spell found panel: just the symbol ---- */
+/* ---- the "scoop picture": the heart (spell symbol) with sparkles around it. Big sparkle = takes a lot, dark = shadow, none = skips ---- */
+const scoopCache = {};
+function scoopURL(j) {
+  if (scoopCache[j]) return scoopCache[j];
+  const S = 48, c = mkCanvas(S, S), x = c.getContext('2d'), K = KERN[j].k, rgb = SPELLS[j].rgb;
+  const light = 'rgb(' + rgb.map((v) => Math.min(255, v + 70)).join(',') + ')';
+  const disc2 = (cx0, cy0, r, col) => { x.fillStyle = col; for (let yy = -r; yy <= r; yy++) { const w = Math.floor(Math.sqrt(r * r - yy * yy)); x.fillRect(cx0 - w, cy0 + yy, w * 2 + 1, 1); } };
+  x.imageSmoothingEnabled = false;
+  x.fillStyle = '#0e0816'; x.fillRect(0, 0, S, S);
+  disc2(24, 24, 21, 'rgba(' + rgb.join(',') + ',0.12)');
+  const maxW = Math.max(...K.map(Math.abs));
+  for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+    if (!dx && !dy) continue;
+    const w = K[(dy + 1) * 3 + dx + 1], cx0 = 24 + dx * 15, cy0 = 24 + dy * 15;
+    if (!w) { disc2(cx0, cy0, 1, 'rgba(215,215,245,0.5)'); continue; }
+    const r = Math.round(2 + 3 * Math.abs(w) / maxW);
+    disc2(cx0, cy0, r, light);
+    if (w < 0) disc2(cx0, cy0, Math.max(1, r - 2), 'rgb(26,10,40)');
+  }
+  x.drawImage(drawRuneCached(j), 15, 15, 18, 18);
+  return (scoopCache[j] = c.toDataURL());
+}
+
+/* ---- spell found panel ---- */
 function fillSpellPanel(i) {
   if (i === undefined) return; const sp = SPELLS[i];
   $('spIcon').src = RUNE_URL[i]; $('spTitle').textContent = sp.name[G.lang]; $('spTitle').style.color = sp.color;
   $('spFn').textContent = sp.fn[G.lang];
-  $('spMatrix').innerHTML = '<img class="bigRune" alt="" src="' + RUNE_URL[i] + '">';
+  $('spMatrix').innerHTML = '<img class="scoop big" alt="" style="--c:' + sp.color + '" src="' + scoopURL(i) + '">';
   $('spNorm').textContent = tr('kidHow');
   $('spBox').style.boxShadow = 'inset 0 0 0 4px ' + sp.color + ',inset 0 0 0 8px #2c1a10,0 0 0 4px ' + sp.color;
 }
 
-/* ---- spellbook: symbol + story, no matrix ---- */
+/* ---- spellbook ---- */
 function renderBook() {
   const lang = G.lang, list = $('bkList'); list.innerHTML = '';
   SPELLS.forEach((s, i) => {
@@ -71,7 +97,7 @@ function renderBook() {
   if (G.collected[G.sel]) {
     d.innerHTML = '<div class="bkTitle" style="color:' + sp.color + '">' + sp.name[lang] + '</div>' +
       '<div class="bkDesc">' + sp.desc[lang] + '</div>' +
-      '<div class="bkHeartBox" style="--c:' + sp.color + '"><img class="bigRune" alt="" src="' + RUNE_URL[G.sel] + '"><div class="bkHeartTxt">' + tr('kidSymbol') + '</div></div>' +
+      '<div class="bkHeartBox" style="--c:' + sp.color + '"><img class="scoop" alt="" src="' + scoopURL(G.sel) + '"><div class="bkHeartTxt">' + tr('kidScoop') + '</div></div>' +
       '<div class="bkColor"><span>' + tr('colorLbl') + ':</span><i style="background:' + sp.color + '"></i><span>' + sp.colorName[lang] + '</span></div>';
   } else d.innerHTML = '<div class="bkLocked"><img src="' + ICON.lock + '" alt="">' + tr('locked') + '<br><br>' + tr('lockedHint') + '</div>';
   const at = $('bkAttempts');
@@ -95,7 +121,14 @@ function slide3Kid(t) {
 }
 SLIDES[3] = slide3Kid;
 
-/* ---- ending lesson: no matrix, the spell symbol in the middle ---- */
+/* ---- end of the intro: a new game starts with the guided practice (Lumi teaches how to collect) ---- */
+function endCutscene() {
+  if (G.state !== 'cutscene') return;
+  hideScreens(); sfx('ui');
+  if (G.csMode === 'new') startTutorial(); else beginPlaying();
+}
+
+/* ---- ending lesson ---- */
 function fillEnding() {
   const i = EN.idx, lang = G.lang, intro = i === 0, gi = intro ? 0 : i - 1, sp = SPELLS[gi];
   const col = intro ? '#f0a030' : sp.color;
@@ -116,7 +149,7 @@ function fillEnding() {
     $('enL2').textContent = tr('enIntro2L'); $('enT2').textContent = tr('enIntro2');
   } else {
     t.textContent = sp.name[lang]; op.textContent = sp.colorName[lang];
-    $('enMx').innerHTML = '<img class="bigRune" alt="" src="' + RUNE_URL[gi] + '">';
+    $('enMx').innerHTML = '<img class="scoop" alt="" style="--c:' + sp.color + '" src="' + scoopURL(gi) + '">';
     note.textContent = '';
     $('enL1').textContent = tr('enL1'); $('enT1').textContent = LESSON[gi].does[lang];
     $('enL2').textContent = tr('enL2'); $('enT2').textContent = LESSON[gi].effect[lang];
@@ -144,4 +177,37 @@ function updateEnding(dt) {
     eax.drawImage(im.after, 0, y, x + 1, 1, 0, y * 3, (x + 1) * 3, 3);
     eax.fillStyle = col; eax.fillRect(x * 3, y * 3, 3, 1); eax.fillRect(x * 3, y * 3 + 2, 3, 1);
   }
+}
+
+/* ---- run bookkeeping, ghost album (stickers) and stars ---- */
+function startNewRun() { buildWorld(); hudAll(); hudLens(); G.wt = 0; G.endT = 0; G.ambT = 5; G.wrongTotal = 0; lastPrompt = ''; }
+
+function albumGet() { try { const a = JSON.parse(localStorage.getItem('hh5c_album') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+function albumAdd(type) {
+  const a = albumGet(); if (a.includes(type)) return false;
+  a.push(type); try { localStorage.setItem('hh5c_album', JSON.stringify(a)); } catch (e) {}
+  return true;
+}
+function onCaptured(g) {
+  G.cap[g.type]++; hudGhosts();
+  const isNew = albumAdd(g.type);
+  toast(tr('captured') + (isNew ? '  +' + tr('kidSticker') : ''), GHOSTS[g.type].color); sfx('capture');
+  if (G.cap.every((c, i) => c >= G.req[i])) { G.endT = 0.7; }
+}
+function starURL(on) {
+  const rows = ['....X....', '...XXX...', 'XXXXXXXXX', '.XXXXXXX.', '..XXXXX..', '.XXX.XXX.', '.XX...XX.'];
+  const c = mkCanvas(9, 7), x = c.getContext('2d');
+  rows.forEach((r, y) => { for (let i = 0; i < 9; i++) if (r[i] === 'X') { x.fillStyle = on ? (y < 3 ? '#fff2a0' : '#ffd24a') : '#3a3348'; x.fillRect(i, y, 1, 1); } });
+  return c.toDataURL();
+}
+function fillWin() {
+  const tot = G.req.reduce((a, b) => a + b, 0);
+  let h = '<div><span>' + tr('sGhosts') + '</span><b>' + G.cap.reduce((a, b) => a + b, 0) + '/' + tot + '</b></div><div><span>' + tr('sTime') + '</span><b>' + fmtTime(G.time) + '</b></div><div><span>' + tr('sSpells') + '</span><b>' + G.collected.filter(Boolean).length + '/5</b></div>';
+  const ratio = G.timeMax ? G.time / G.timeMax : 0, wr = G.wrongTotal | 0;
+  const stars = (wr === 0 && ratio >= 0.35) ? 3 : (wr <= 1 || ratio >= 0.35) ? 2 : 1;
+  h += '<div class="starsRow">' + [0, 1, 2].map((i) => '<img alt="" src="' + starURL(i < stars) + '">').join('') + '</div>';
+  const alb = albumGet();
+  h += '<div class="albumLbl">' + tr('kidAlbum') + '</div><div class="albumRow">' +
+    [0, 1, 2, 3, 4].map((i) => '<img alt="" title="' + GHOSTS[i].name[G.lang] + '" class="' + (alb.includes(i) ? '' : 'off') + '" src="' + ghostCanvas(i, 0, 0, 0).toDataURL() + '">').join('') + '</div>';
+  $('winStats').innerHTML = h;
 }
