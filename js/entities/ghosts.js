@@ -136,6 +136,8 @@ function dDrifter(c, f) {
   c.fillStyle = '#d9b92a'; c.fillRect(19, 22, 5, 4); c.fillRect(20, 26, 3, 2);
 }
 const GDRAW = [dWraith, dReaper, dWatcher, dEngraved, dDrifter];
+// where each ghost's "magic heart" sits on its chest, in sprite pixels (the spell symbol is drawn there)
+const HEART = [[16, 16], [16, 20], [16, 17], [16, 21], [21, 16]];
 
 /* ---- REAL convolution pipeline ----
    Each ghost has a hidden image H (its true sprite + a "problem") and exactly one spell whose kernel genuinely solves it.
@@ -270,7 +272,7 @@ function ghostSpr(type, form, f, eye) {
 }
 
 /* ---- spell runes (16x16) ---- */
-const RUNE = [], RUNE_URL = [];
+const RUNE = [], RUNE_URL = [], GREY_RUNE = [], GREY_RUNE_CV = [];
 function drawRune(i) {
   const c = mkCanvas(16, 16), x = c.getContext('2d'), col = SPELLS[i].rgb;
   for (let yy = 0; yy < 16; yy++) for (let xx = 0; xx < 16; xx++) {
@@ -301,6 +303,13 @@ function buildRunes() {
   for (let i = 0; i < 5; i++) {
     const c = drawRune(i); RUNE_URL[i] = c.toDataURL();
     RUNE[i] = new Uint32Array(c.getContext('2d').getImageData(0, 0, 16, 16).data.buffer.slice(0));
+    // grey, solid-only version of the rune: the ghost's missing "magic heart"
+    const id = c.getContext('2d').getImageData(0, 0, 16, 16), d = id.data;
+    for (let p = 0; p < d.length; p += 4) {
+      if (d[p + 3] > 140) { const gv = (60 + (0.3 * d[p] + 0.59 * d[p + 1] + 0.11 * d[p + 2]) * 0.3) | 0; d[p] = gv; d[p + 1] = gv; d[p + 2] = gv + 10; d[p + 3] = 235; } else d[p + 3] = 0;
+    }
+    const gc = mkCanvas(16, 16); gc.getContext('2d').putImageData(id, 0, 0);
+    GREY_RUNE_CV[i] = gc; GREY_RUNE[i] = new Uint32Array(d.buffer.slice(0));
   }
 }
 
@@ -325,7 +334,7 @@ function pickTarget(g) {
   g.tx = g.x; g.ty = g.y;
 }
 function updateGhost(g, dt) {
-  if (g.state === 'captured') return;
+  if (g.state === 'captured' || g.state === 'casting') return;   // a ghost being cast on stays frozen
   if (g.state === 'capturing') {
     g.ct += dt;
     if (g.ct > 0.45 && !g.burst) { g.burst = true; burst(g.x, g.y, 0.4, GHOSTS[g.type].rgb, 36); }

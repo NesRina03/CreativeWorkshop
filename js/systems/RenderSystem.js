@@ -144,13 +144,18 @@ function scanSpr(g, fr, eye) {
   }
   return SCAN_BUF;
 }
+/* the ghost's "magic heart" on its chest: grey while hidden, coloured once restored */
+function drawHeart(g, gp, z, alpha, colored) {
+  const hp = HEART[g.type], s = gp.scale * 10 / 32, off = (hp[0] - 16) / 32 * gp.scale;
+  drawSprite(colored ? RUNE[g.type] : GREY_RUNE[g.type], 16, g.x - cam.dy * off, g.y + cam.dx * off, s, z + (32 - hp[1]) / 32 * gp.scale - s / 2, { alpha });
+}
 function renderFrame(cm, lensOn, time, wtime, interactive) {
   cam.x = cm.x; cam.y = cm.y; cam.a = cm.a; cam.dx = Math.cos(cm.a); cam.dy = Math.sin(cm.a);
   renderWorld(lensOn, time, wtime);
   const fk = flickerFactor(time), list = [];
   for (const g of G.ghosts) {
     g.sr = null; g.vis = false;
-    if (g.state === 'captured' || !lensOn) continue;
+    if (g.state === 'captured' || g.state === 'casting' || !lensOn) continue;   // 'casting': drawn by CastScene instead
     const d = Math.hypot(g.x - cam.x, g.y - cam.y); if (d > LENS_RANGE) continue;
     list.push({ k: 'g', o: g, d });
   }
@@ -180,6 +185,7 @@ function renderFrame(cm, lensOn, time, wtime, interactive) {
       const z = gp.z + Math.sin(time * 1.7 + g.ph) * gp.bob + (g.type === 0 ? 0.04 : 0);
       if (g.type === 1 && ((time * 3 + g.ph) % 5) < 0.2) ex = (rnd() - 0.5) * 0.05;
       const info = drawSprite(spr, SPR, g.x + ex, g.y, sc, z, o);
+      if (info && info.drawn && (g.state === 'hidden' || g.state === 'revealed')) drawHeart(g, gp, z, o.alpha, g.state === 'revealed');
       if (info && info.drawn) { g.sr = info; g.vis = true; if (!g.seen && interactive) { g.seen = true; seenNew = true; } }
     }
   }
