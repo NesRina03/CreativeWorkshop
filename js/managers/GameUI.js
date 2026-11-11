@@ -7,7 +7,7 @@ const el = {
   hud: $('hud'), timer: $('timer'), gc: $('gcounters'), prompt: $('prompt'), toast: $('toast'), clickHint: $('clickHint'),
   lens: $('btnLens'), lensImg: $('lensImg'), crosshair: $('crosshair'), lensFx: $('lensFx'), flash: $('flashFx')
 };
-const SCREENS = ['menu', 'options', 'language', 'pause', 'cutscene', 'spellPanel', 'book', 'ending', 'win', 'lose', 'bye'];
+const SCREENS = ['menu', 'options', 'language', 'pause', 'cutscene', 'spellPanel', 'book', 'castScene', 'ending', 'win', 'lose', 'bye'];
 function showScreen(id) { SCREENS.forEach((s) => $(s).classList.toggle('hidden', s !== id)); }
 function hideScreens() { SCREENS.forEach((s) => $(s).classList.add('hidden')); }
 let toastTimer = 0;
@@ -215,17 +215,7 @@ function renderBook() {
   $('bkCast').style.display = G.bookGhost ? '' : 'none';
   $('bkCast').disabled = !G.collected[G.sel]; $('bkCast').style.opacity = G.collected[G.sel] ? 1 : 0.45;
 }
-function castSpell() {
-  const g = G.bookGhost; if (G.state !== 'book' || !g || !G.collected[G.sel]) return;
-  if (G.sel === g.type) {
-    g.state = 'revealing'; g.rt = 0; sfx('scan'); flashFx(SPELLS[G.sel].rgb);
-    closeBook(); toast(tr('scanning'), SPELLS[g.type].color);
-  } else {
-    g.wrong++; sfx('wrong'); sfx('scan'); g.state = 'wrongcast'; g.wj = G.sel; g.rt = 0;
-    toast(tr('wrong') + (g.wrong < 2 ? ' ' + (2 - g.wrong) + ' ' + tr('attemptsLeft') : ''), '#ff4a4a');
-    closeBook();
-  }
-}
+function castSpell() { startCast(); }      // the whole casting sequence lives in CastScene.js
 
 /* ---- shooting ---- */
 function shoot() {

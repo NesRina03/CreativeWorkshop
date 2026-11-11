@@ -5,6 +5,7 @@
 <title>The Haunted House: The Five Convolutions</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/cast.css">
 </head>
 <body>
 <div id="stage">
@@ -96,6 +97,13 @@
     <div id="csBox"><div id="csText"></div><div id="csDots"></div></div>
     <div id="csSkip" data-i="skip">Press ENTER to skip</div>
     <div id="csNext" data-i="next">SPACE / CLICK: next</div>
+  </div>
+
+  <!-- CAST SCENE (close-up while a spell is cast on a ghost) -->
+  <div id="castScene" class="screen hidden">
+    <canvas id="castCanvas" width="320" height="200"></canvas>
+    <div id="castBox"><div id="castText"></div></div>
+    <div id="castHint"></div>
   </div>
 
   <!-- SPELL COLLECTED PANEL -->
@@ -205,6 +213,9 @@
 <script src="js/core/Game.js"></script>
 <script src="js/systems/RenderSystem.js"></script>
 <script src="js/managers/GameUI.js"></script>
+<script src="js/managers/KidMode.js"></script>
+<script src="js/systems/CastScene.js"></script>
+<script src="js/systems/Polish.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

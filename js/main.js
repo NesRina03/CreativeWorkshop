@@ -112,6 +112,9 @@ window.addEventListener('keydown', (e) => {
       else if (c === 'ArrowDown') selectBookSpell((G.sel + 1) % SPELLS.length);
       else if (/^Digit[1-5]$/.test(c)) selectBookSpell(+c.slice(5) - 1);
       break;
+    case 'cast':
+      if (c === 'Enter' || c === 'NumpadEnter' || c === 'Space' || c === 'Escape') castAdvance();
+      break;
     case 'spellPanel':
       if (c === 'Enter' || c === 'Space' || c === 'Escape' || c === 'KeyF') closeSpellPanel(); break;
     case 'ending':
@@ -146,6 +149,7 @@ function frame(now) {
     update(dt);
     if (G.shotT > 0) G.shotT -= dt;
     if (G.state === 'ending') updateEnding(dt);
+    if (G.state === 'cast') updateCast(dt);
     render();
     if (!el.hud.classList.contains('hidden')) drawMinimap();
     if (G.state === 'playing') el.clickHint.textContent = document.pointerLockElement === view ? '' : tr('clickHint');
