@@ -1,4 +1,4 @@
-# 👻 The Haunted House: The Five Convolutions
+#  The Haunted House: The Five Convolutions
 
 > Find five ancient spells. Reveal the hidden ghosts. Free every spirit before the clock runs out.
 
