@@ -1,4 +1,4 @@
-#  The Haunted House: The Five Convolutions
+#  The Haunted Hills Game
 
 > Find five ancient spells. Reveal the hidden ghosts. Free every spirit before the clock runs out.
 
@@ -12,7 +12,7 @@ Available in **English** and **Arabic** (with right-to-left layout).
 
 ## Table of contents
 
-- [👻 The Haunted House: The Five Convolutions](#-the-haunted-house-the-five-convolutions)
+- [The Haunted Hills Game](#the-haunted-hills-game)
   - [Table of contents](#table-of-contents)
   - [The story](#the-story)
   - [How to play](#how-to-play)
