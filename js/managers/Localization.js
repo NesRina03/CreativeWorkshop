@@ -3,7 +3,7 @@
 /*i18n */
 const L = {
   en: {
-    title: 'THE HAUNTED HOUSE', subtitle: 'Five Magic Spells',
+    title: 'THE HAUNTED HILLS', subtitle: 'Five Magic Spells',
     play: 'PLAY', options: 'OPTIONS', language: 'LANGUAGE', exit: 'EXIT', back: 'BACK',
     sound: 'SOUND', music: 'MUSIC', resume: 'RESUME', restart: 'RESTART', mainMenu: 'MAIN MENU', paused: 'PAUSED',
     skip: 'Press ESC to skip', next: 'ENTER / SPACE / CLICK: next', cont: 'CONTINUE',
